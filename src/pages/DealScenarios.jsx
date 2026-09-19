@@ -17,8 +17,6 @@ const QUESTIONS = {
   title_holding_state: {
     key: 'title_holding_state',
     prompt: 'Is the vehicle titled in a title-holding state?',
-    list: ['Kentucky', 'Maryland', 'Michigan', 'Minnesota', 'Missouri', 'Montana', 'New York', 'Oklahoma', 'Wisconsin'],
-    note: 'Wisconsin applies where the lien was initiated on or after 30 July 2012.',
     options: [
       { label: 'Yes', value: 'Yes' },
       { label: 'No', value: 'No' },
@@ -109,13 +107,14 @@ export default function DealScenarios() {
     Promise.all([
       base44.entities.DealScenario.list('code', 200),
       base44.entities.DocumentArtifact.list('-updated_date', 200),
+      base44.entities.TitleState.filter({ title_holding: true }, 'state_name', 200).catch(() => []),
     ])
-      .then(([scenarios, docs]) => {
+      .then(([scenarios, docs, titleStates]) => {
         const docMap = {};
         docs.forEach((d) => { docMap[d.id] = d; });
-        setData({ scenarios, docMap });
+        setData({ scenarios, docMap, titleStates });
       })
-      .catch(() => setData({ scenarios: [], docMap: {} }));
+      .catch(() => setData({ scenarios: [], docMap: {}, titleStates: [] }));
   }, []);
 
   function startWizard() {
@@ -231,15 +230,19 @@ export default function DealScenarios() {
           </span>
         </div>
         <h1 className="font-heading text-xl font-bold tracking-tight">{q.prompt}</h1>
-        {q.list && (
+        {currentKey === 'title_holding_state' && data.titleStates && data.titleStates.length > 0 && (
           <div className="mt-3 rounded-md border border-border bg-muted/40 p-3">
             <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Title-holding states</div>
             <div className="mt-1.5 flex flex-wrap gap-1.5">
-              {q.list.map((st) => (
-                <span key={st} className="rounded-md border border-border bg-card px-2 py-0.5 text-xs">{st}</span>
+              {data.titleStates.map((st) => (
+                <span key={st.id} className="rounded-md border border-border bg-card px-2 py-0.5 text-xs">
+                  {st.state_name} ({st.two_letter_code})
+                </span>
               ))}
             </div>
-            {q.note && <p className="mt-2 text-xs text-muted-foreground">{q.note}</p>}
+            {data.titleStates.filter((st) => st.special_rules).map((st) => (
+              <p key={st.id} className="mt-2 text-xs text-muted-foreground">{st.state_name}: {st.special_rules}</p>
+            ))}
           </div>
         )}
         <div className="mt-5 space-y-2.5">
