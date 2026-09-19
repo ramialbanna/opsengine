@@ -8,13 +8,15 @@ export function useGlossary() {
 }
 
 export function GlossaryProvider({ children }) {
-  const [terms, setTerms] = useState(null);
+  const [state, setState] = useState({ terms: null, status: 'loading' });
+  const [retryKey, setRetryKey] = useState(0);
   useEffect(() => {
     let alive = true;
     base44.entities.GlossaryTerm.list('term', 500)
-      .then((t) => { if (alive) setTerms(t); })
-      .catch(() => { if (alive) setTerms([]); });
+      .then((t) => { if (alive) setState({ terms: t, status: 'loaded' }); })
+      .catch(() => { if (alive) setState({ terms: null, status: 'failed' }); });
     return () => { alive = false; };
-  }, []);
-  return <GlossaryContext.Provider value={terms}>{children}</GlossaryContext.Provider>;
+  }, [retryKey]);
+  const retry = () => { setState({ terms: null, status: 'loading' }); setRetryKey((k) => k + 1); };
+  return <GlossaryContext.Provider value={{ ...state, retry }}>{children}</GlossaryContext.Provider>;
 }

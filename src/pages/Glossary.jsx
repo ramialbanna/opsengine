@@ -3,18 +3,23 @@ import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { cn } from '@/lib/utils';
 import { Search } from 'lucide-react';
+import LoadError from '@/components/LoadError';
 
 const CATEGORIES = ['Document', 'Financial', 'Operational', 'System', 'Title', 'Vehicle', 'Auction'];
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 export default function Glossary() {
   const [items, setItems] = useState(null);
+  const [error, setError] = useState(false);
+  const [retryKey, setRetryKey] = useState(0);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('All');
 
   useEffect(() => {
-    base44.entities.GlossaryTerm.list('term', 500).then(setItems).catch(() => setItems([]));
-  }, []);
+    base44.entities.GlossaryTerm.list('term', 500)
+      .then((t) => { setItems(t); setError(false); })
+      .catch(() => { setError(true); });
+  }, [retryKey]);
 
   const termMap = useMemo(() => {
     const m = {};
@@ -50,6 +55,10 @@ export default function Glossary() {
   }, [filtered]);
 
   const availableLetters = useMemo(() => new Set(groups.map((g) => g.letter)), [groups]);
+
+  if (error) {
+    return <LoadError backTo="/" backLabel="Back" onRetry={() => { setError(false); setRetryKey((k) => k + 1); }} />;
+  }
 
   return (
     <div>

@@ -55,7 +55,9 @@ const baseComponents = {
 };
 
 export default function Markdown({ children }) {
-  const terms = useGlossary();
+  const glossary = useGlossary();
+  const terms = glossary?.terms;
+  const glossaryFailed = glossary?.status === 'failed';
   const matcher = useMemo(() => {
     if (!terms || !terms.length) return null;
     const map = {};
@@ -91,6 +93,9 @@ export default function Markdown({ children }) {
   return (
     <div className="space-y-3">
       <ReactMarkdown components={components}>{content}</ReactMarkdown>
+      {glossaryFailed && (
+        <p className="text-xs text-muted-foreground/60">Glossary tooltips unavailable.</p>
+      )}
     </div>
   );
 }
