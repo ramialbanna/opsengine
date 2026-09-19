@@ -15,6 +15,10 @@ import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
 import ResetPassword from '@/pages/ResetPassword';
+import StageDetail from '@/pages/StageDetail';
+import Departments from '@/pages/Departments';
+import DealScenarios from '@/pages/DealScenarios';
+import Glossary from '@/pages/Glossary';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -53,8 +57,11 @@ const AuthenticatedApp = () => {
           <Route path="/auction" element={<SectionPage sectionId="auction" />} />
           <Route path="/sales" element={<SectionPage sectionId="sales" />} />
           <Route path="/collections" element={<SectionPage sectionId="collections" />} />
-          <Route path="/departments" element={<SectionPage sectionId="departments" />} />
+          <Route path="/departments" element={<Departments />} />
           <Route path="/onboarding" element={<SectionPage sectionId="onboarding" />} />
+          <Route path="/stages/:number" element={<StageDetail />} />
+          <Route path="/deal-scenarios" element={<DealScenarios />} />
+          <Route path="/glossary" element={<Glossary />} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />

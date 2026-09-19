@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import ThemeToggle from './ThemeToggle';
-import { Search, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import HeaderSearch from './HeaderSearch';
 
 export default function Layout() {
   const [open, setOpen] = useState(false);
@@ -48,10 +49,7 @@ export default function Layout() {
           </button>
 
           <div className="flex flex-1 items-center justify-center lg:justify-start">
-            <div className="flex w-full max-w-md items-center gap-2 rounded-md border border-input bg-muted/40 px-3 py-2 text-muted-foreground">
-              <Search className="h-4 w-4 shrink-0" />
-              <span className="select-none text-[13px]">Search procedures, roles, forms…</span>
-            </div>
+            <HeaderSearch />
           </div>
 
           <ThemeToggle />
