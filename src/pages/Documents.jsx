@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import Markdown from '@/components/Markdown';
 import { AlertTriangle, Pin } from 'lucide-react';
+import { groupStyleForCode } from '@/lib/scenarioGroups';
 
 const STANDING_RULES = [
   'Black or blue ink only.',
@@ -47,7 +48,7 @@ function DocCard({ doc, scenarios }) {
           <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Required by scenarios</div>
           <div className="flex flex-wrap gap-1.5">
             {scenarios.map((s) => (
-              <span key={s.id} title={s.name} className="rounded-md border border-border bg-muted px-2 py-0.5 text-xs font-medium">{s.code}</span>
+              <span key={s.id} title={s.name} className={`rounded-md border px-2 py-0.5 text-xs font-bold ${groupStyleForCode(s.code).badge}`}>{s.code}</span>
             ))}
           </div>
         </div>

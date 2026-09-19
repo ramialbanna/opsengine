@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import ScenarioResult from '@/components/scenario/ScenarioResult';
+import ScenarioOverview from '@/components/scenario/ScenarioOverview';
+import { groupStyleForCode } from '@/lib/scenarioGroups';
 import { ChevronRight, ChevronLeft, FileText, AlertCircle } from 'lucide-react';
 
 const QUESTIONS = {
@@ -181,6 +183,8 @@ export default function DealScenarios() {
             </div>
           )}
         </div>
+
+        <ScenarioOverview />
       </div>
     );
   }
@@ -200,7 +204,7 @@ export default function DealScenarios() {
               onClick={() => pickCode(s)}
               className="flex items-center gap-3 rounded-xl border-2 border-border bg-card p-4 text-left transition-colors hover:border-brand active:bg-accent"
             >
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-primary text-sm font-bold text-primary-foreground">{s.code}</span>
+              <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-md text-sm font-bold ${groupStyleForCode(s.code).solid}`}>{s.code}</span>
               <span className="min-w-0 font-heading text-sm font-semibold">{s.name}</span>
             </button>
           ))}

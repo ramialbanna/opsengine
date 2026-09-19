@@ -1,5 +1,6 @@
 import Markdown from '@/components/Markdown';
 import DocumentCard from './DocumentCard';
+import { groupStyleForCode } from '@/lib/scenarioGroups';
 import { RotateCcw, ListOrdered, Info } from 'lucide-react';
 
 function StepHeader({ n, title }) {
@@ -27,7 +28,7 @@ export default function ScenarioResult({ scenario, docMap, onRestart, onPickAnot
   return (
     <div>
       <div className="flex items-center gap-3">
-        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-primary font-heading text-base font-bold text-primary-foreground">
+        <div className={`grid h-12 w-12 shrink-0 place-items-center rounded-md font-heading text-base font-bold ${groupStyleForCode(scenario.code).solid}`}>
           {scenario.code}
         </div>
         <div>
