@@ -186,7 +186,7 @@ export default function DealScenarios() {
           )}
         </div>
 
-        <ScenarioOverview />
+        <ScenarioOverview scenarios={data.scenarios} />
       </div>
     );
   }

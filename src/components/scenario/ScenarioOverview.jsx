@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ChevronDown, ArrowRight, HelpCircle } from 'lucide-react';
+import { ChevronDown, HelpCircle } from 'lucide-react';
 import { GROUP_COLORS } from '@/lib/scenarioGroups';
 
 function QuestionBox({ children }) {
@@ -38,16 +38,12 @@ function CodeBadge({ code }) {
   );
 }
 
-function GroupCard({ answer, groupNum, codes, firstCode, sublabel }) {
+function GroupCard({ answer, groupNum, codes, codeNames, sublabel }) {
   const g = GROUP_COLORS[groupNum];
   return (
-    <Link
-      to={`/deal-scenarios/${firstCode}`}
-      className={`block rounded-lg border ${g.card} p-4 transition-shadow hover:shadow-md`}
-    >
+    <div className={`rounded-lg border ${g.card} p-4`}>
       <div className="flex items-center justify-between gap-2">
         <span className="text-sm font-semibold text-foreground">{answer}</span>
-        <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground" />
       </div>
       <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
         <span className={`rounded-md border px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide ${g.badge}`}>
@@ -56,7 +52,19 @@ function GroupCard({ answer, groupNum, codes, firstCode, sublabel }) {
         <span className={`text-sm font-semibold ${g.accent}`}>{codes.join(' · ')}</span>
       </div>
       {sublabel && <p className="mt-1.5 text-xs italic text-muted-foreground">{sublabel}</p>}
-    </Link>
+      <div className="mt-3 space-y-2">
+        {codes.map((code) => (
+          <Link
+            key={code}
+            to={`/deal-scenarios/${code}`}
+            className="flex min-h-11 items-center gap-3 rounded-md border border-border bg-card px-3 py-2 transition-colors hover:border-brand hover:bg-accent"
+          >
+            <CodeBadge code={code} />
+            <span className="text-xs leading-snug text-foreground">{(codeNames && codeNames[code]) || code}</span>
+          </Link>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -82,7 +90,11 @@ function LienCard({ answer, result }) {
   );
 }
 
-export default function ScenarioOverview() {
+export default function ScenarioOverview({ scenarios }) {
+  const codeNames = {};
+  if (scenarios) {
+    scenarios.forEach((s) => { codeNames[s.code] = s.name; });
+  }
   return (
     <section className="mt-8">
       <h2 className="font-heading text-lg font-bold tracking-tight">How the fifteen scenarios are organised</h2>
@@ -99,7 +111,7 @@ export default function ScenarioOverview() {
             <QuestionBox>Who is the seller?</QuestionBox>
             <Connector />
             <div className="space-y-2.5">
-              <GroupCard answer="Individual" groupNum={1} codes={['1A', '1B', '1C']} firstCode="1A" />
+              <GroupCard answer="Individual" groupNum={1} codes={['1A', '1B', '1C']} codeNames={codeNames} />
               <ScenarioCard answer="Deceased owner" code="4A" desc="Death certificate + Letters of Testamentary/Administration" />
               <ScenarioCard answer="Trust" code="4B" desc="Trust documents" />
               <ScenarioCard answer="Dealer" code="4C" desc="Dealer licence" />
@@ -114,12 +126,12 @@ export default function ScenarioOverview() {
             <QuestionBox>Is it a title-holding state?</QuestionBox>
             <Connector />
             <div className="space-y-2.5">
-              <GroupCard answer="Yes" groupNum={2} codes={['2A', '2B', '2C', '2D']} firstCode="2A" />
+              <GroupCard answer="Yes" groupNum={2} codes={['2A', '2B', '2C', '2D']} codeNames={codeNames} />
               <GroupCard
                 answer="No"
                 groupNum={3}
                 codes={['3A', '3B', '3C', '3D']}
-                firstCode="3A"
+                codeNames={codeNames}
                 sublabel="No title photos in the initial set"
               />
             </div>
