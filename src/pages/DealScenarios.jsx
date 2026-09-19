@@ -71,7 +71,7 @@ function nextQuestionKey(currentKey, answers) {
 }
 
 function matchScenario(scenarios, a) {
-  return scenarios.find((s) => {
+  return scenarios.filter((s) => {
     if (s.title_status !== a.title_status) return false;
     if (a.title_status === 'Payoff') {
       if (s.title_holding_state !== a.title_holding_state) return false;
@@ -103,6 +103,7 @@ export default function DealScenarios() {
   const [currentKey, setCurrentKey] = useState('title_status');
   const [history, setHistory] = useState([]);
   const [scenario, setScenario] = useState(null);
+  const [candidates, setCandidates] = useState([]);
 
   useEffect(() => {
     Promise.all([
@@ -128,10 +129,11 @@ export default function DealScenarios() {
     const newAnswers = { ...answers, [QUESTIONS[currentKey].key]: value };
     const next = nextQuestionKey(currentKey, newAnswers);
     if (!next) {
-      const m = matchScenario(data.scenarios, newAnswers);
+      const matches = matchScenario(data.scenarios, newAnswers);
       setAnswers(newAnswers);
-      if (m) { setScenario(m); setView('results'); }
-      else { setView('noMatch'); }
+      if (matches.length === 0) { setView('noMatch'); }
+      else if (matches.length === 1) { setScenario(matches[0]); setView('results'); }
+      else { setCandidates(matches); setView('disambiguate'); }
     } else {
       setAnswers(newAnswers);
       setHistory((h) => [...h, currentKey]);
@@ -264,6 +266,32 @@ export default function DealScenarios() {
           <button onClick={restart} className="mt-4 inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">
             Start over
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (view === 'disambiguate') {
+    return (
+      <div>
+        <button onClick={goBack} className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+          <ChevronLeft className="h-4 w-4" /> Back
+        </button>
+        <h1 className="font-heading text-xl font-bold tracking-tight">More than one scenario fits — which is yours?</h1>
+        <div className="mt-5 space-y-2.5">
+          {candidates.map((s) => (
+            <button
+              key={s.id}
+              onClick={() => { setScenario(s); setView('results'); }}
+              className="flex w-full items-center justify-between rounded-xl border-2 border-border bg-card px-5 py-4 text-left transition-colors hover:border-brand active:bg-accent"
+            >
+              <span>
+                <span className="block font-heading text-lg font-bold tracking-tight">{s.code}</span>
+                <span className="mt-0.5 block text-sm font-normal text-muted-foreground">{s.name}</span>
+              </span>
+              <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground" />
+            </button>
+          ))}
         </div>
       </div>
     );
