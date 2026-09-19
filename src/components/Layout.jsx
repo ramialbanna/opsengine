@@ -4,6 +4,7 @@ import Sidebar from './Sidebar';
 import ThemeToggle from './ThemeToggle';
 import { Menu, X } from 'lucide-react';
 import HeaderSearch from './HeaderSearch';
+import { GlossaryProvider } from '@/lib/GlossaryContext';
 
 export default function Layout() {
   const [open, setOpen] = useState(false);
@@ -56,7 +57,9 @@ export default function Layout() {
         </header>
 
         <main className="mx-auto max-w-5xl px-4 py-6 lg:px-8 lg:py-10">
-          <Outlet />
+          <GlossaryProvider>
+            <Outlet />
+          </GlossaryProvider>
         </main>
       </div>
     </div>
