@@ -19,6 +19,7 @@ import StageDetail from '@/pages/StageDetail';
 import Departments from '@/pages/Departments';
 import DealScenarios from '@/pages/DealScenarios';
 import Glossary from '@/pages/Glossary';
+import DepartmentDetail from '@/pages/DepartmentDetail';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -62,6 +63,7 @@ const AuthenticatedApp = () => {
           <Route path="/stages/:number" element={<StageDetail />} />
           <Route path="/deal-scenarios" element={<DealScenarios />} />
           <Route path="/glossary" element={<Glossary />} />
+          <Route path="/departments/:id" element={<DepartmentDetail />} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />

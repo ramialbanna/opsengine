@@ -16,6 +16,14 @@
       "format": "textarea",
       "description": "Which roles or departments use the system."
     },
+    "departments": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "relation": "Department"
+      },
+      "description": "Departments that use this system."
+    },
     "notes": {
       "type": "string",
       "format": "textarea",
