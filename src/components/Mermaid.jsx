@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import mermaid from 'mermaid';
 import { useTheme } from '@/lib/ThemeContext';
 
 let idCounter = 0;
@@ -10,17 +9,21 @@ export default function Mermaid({ chart, className }) {
 
   useEffect(() => {
     let cancelled = false;
-    mermaid.initialize({
-      startOnLoad: false,
-      securityLevel: 'loose',
-      theme: theme === 'dark' ? 'dark' : 'default',
-      flowchart: { htmlLabels: true, curve: 'basis' },
+    import('mermaid').then((m) => {
+      if (cancelled) return;
+      const mermaid = m.default;
+      mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: 'strict',
+        theme: theme === 'dark' ? 'dark' : 'default',
+        flowchart: { htmlLabels: true, curve: 'basis' },
+      });
+      const id = `mermaid-${idCounter++}`;
+      mermaid
+        .render(id, chart)
+        .then(({ svg }) => { if (!cancelled) setSvg(svg); })
+        .catch(() => { if (!cancelled) setSvg(''); });
     });
-    const id = `mermaid-${idCounter++}`;
-    mermaid
-      .render(id, chart)
-      .then(({ svg }) => { if (!cancelled) setSvg(svg); })
-      .catch(() => { if (!cancelled) setSvg(''); });
     return () => { cancelled = true; };
   }, [chart, theme]);
 
