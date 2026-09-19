@@ -1,6 +1,32 @@
 import { Link } from 'react-router-dom';
 import StageRail from '@/components/StageRail';
+import Mermaid from '@/components/Mermaid';
 import { Building2, FileText, BookText, ArrowRight } from 'lucide-react';
+
+const PROCESS_FLOW = `flowchart TD
+    D[Dealer]
+    A[Auction]
+    C[Consignment]
+    CO[Consumer]
+    D --> S1
+    A --> S1
+    C --> S1
+    CO --> S4
+    S1["1 · Sourcing & Appraisal"]
+    S2["2 · Deal Closing & Appointment"]
+    S3["3 · Deal Entry & Packet"]
+    S4["4 · Pre-Purchase Audit (consumer only)"]
+    S5["5 · Scheduling & Assignment"]
+    S6["6 · Purchase Execution"]
+    S7["7 · Inbound Logistics"]
+    S8["8 · Intake & Inventory Control"]
+    S9["9 · Reconditioning (conditional)"]
+    S10["10 · Cost Capture (spans 5–12)"]
+    S11["11 · Sale"]
+    S12["12 · Post-Sale Title · Collection · Arbitration"]
+    S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7 --> S8 --> S9 --> S11 --> S12
+    S10 -.- S5
+    S10 -.- S12`;
 
 const entryPoints = [
   { to: '/departments', title: 'Find my department', desc: 'Browse the department directory — purpose, ownership, and roles.', icon: Building2 },
@@ -25,6 +51,15 @@ export default function Home() {
           The vehicle lifecycle
         </h2>
         <StageRail />
+      </section>
+
+      <section className="mb-10">
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+          Process flow
+        </h2>
+        <div className="overflow-x-auto rounded-lg border border-border bg-card p-4 [&_svg]:max-w-none">
+          <Mermaid chart={PROCESS_FLOW} />
+        </div>
       </section>
 
       <section>
