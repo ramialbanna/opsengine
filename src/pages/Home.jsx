@@ -5,6 +5,7 @@ import StageRail from '@/components/StageRail';
 import Mermaid from '@/components/Mermaid';
 import RecentlyUpdated from '@/components/RecentlyUpdated';
 import { Building2, FileText, BookText, ArrowRight } from 'lucide-react';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 function buildFlowchart(stages) {
   const sorted = [...stages].sort((a, b) => a.number - b.number);
@@ -38,7 +39,7 @@ export default function Home() {
   const [stages, setStages] = useState(null);
 
   useEffect(() => {
-    base44.entities.Stage.list('number', 20)
+    base44.entities.Stage.list(ENTITY_LIMITS.Stage.sort, ENTITY_LIMITS.Stage.limit)
       .then(setStages)
       .catch(() => setStages([]));
   }, []);

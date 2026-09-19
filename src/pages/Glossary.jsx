@@ -4,6 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { cn } from '@/lib/utils';
 import { Search } from 'lucide-react';
 import LoadError from '@/components/LoadError';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 const CATEGORIES = ['Document', 'Financial', 'Operational', 'System', 'Title', 'Vehicle', 'Auction'];
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -16,7 +17,7 @@ export default function Glossary() {
   const [filter, setFilter] = useState('All');
 
   useEffect(() => {
-    base44.entities.GlossaryTerm.list('term', 500)
+    base44.entities.GlossaryTerm.list(ENTITY_LIMITS.GlossaryTerm.sort, ENTITY_LIMITS.GlossaryTerm.limit)
       .then((t) => { setItems(t); setError(false); })
       .catch(() => { setError(true); });
   }, [retryKey]);

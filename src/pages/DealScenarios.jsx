@@ -4,6 +4,7 @@ import ScenarioResult from '@/components/scenario/ScenarioResult';
 import ScenarioOverview from '@/components/scenario/ScenarioOverview';
 import { groupStyleForCode } from '@/lib/scenarioGroups';
 import { ChevronRight, ChevronLeft, FileText, AlertCircle } from 'lucide-react';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 const QUESTIONS = {
   title_status: {
@@ -105,8 +106,8 @@ export default function DealScenarios() {
 
   useEffect(() => {
     Promise.all([
-      base44.entities.DealScenario.list('code', 200),
-      base44.entities.DocumentArtifact.list('-updated_date', 200),
+      base44.entities.DealScenario.list(ENTITY_LIMITS.DealScenario.sort, ENTITY_LIMITS.DealScenario.limit),
+      base44.entities.DocumentArtifact.list(ENTITY_LIMITS.DocumentArtifact.sort, ENTITY_LIMITS.DocumentArtifact.limit),
       base44.entities.TitleState.filter({ title_holding: true }, 'state_name', 200).catch(() => []),
     ])
       .then(([scenarios, docs, titleStates]) => {

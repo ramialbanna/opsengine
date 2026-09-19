@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 export default function Systems() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
     Promise.all([
-      base44.entities.System.list('name', 200),
-      base44.entities.Procedure.list('-updated_date', 500),
-      base44.entities.Stage.list('number', 100),
-      base44.entities.Department.list(),
+      base44.entities.System.list(ENTITY_LIMITS.System.sort, ENTITY_LIMITS.System.limit),
+      base44.entities.Procedure.list(ENTITY_LIMITS.Procedure.sort, ENTITY_LIMITS.Procedure.limit),
+      base44.entities.Stage.list(ENTITY_LIMITS.Stage.sort, ENTITY_LIMITS.Stage.limit),
+      base44.entities.Department.list(ENTITY_LIMITS.Department.sort, ENTITY_LIMITS.Department.limit),
     ])
       .then(([systems, procedures, stages, depts]) => {
         const stageMap = {};

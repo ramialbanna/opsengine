@@ -5,6 +5,7 @@ import ScenarioResult from '@/components/scenario/ScenarioResult';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { ArrowLeft } from 'lucide-react';
 import LoadError from '@/components/LoadError';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 export default function ScenarioDetail() {
   const { code } = useParams();
@@ -17,7 +18,7 @@ export default function ScenarioDetail() {
       try {
         const [scenarios, docs] = await Promise.all([
           base44.entities.DealScenario.filter({ code }),
-          base44.entities.DocumentArtifact.list('-updated_date', 200),
+          base44.entities.DocumentArtifact.list(ENTITY_LIMITS.DocumentArtifact.sort, ENTITY_LIMITS.DocumentArtifact.limit),
         ]);
         const docMap = {};
         docs.forEach((d) => { docMap[d.id] = d; });

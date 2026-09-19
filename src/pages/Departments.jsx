@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { Building2 } from 'lucide-react';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 function DeptCard({ d, stages }) {
   return (
@@ -40,8 +41,8 @@ export default function Departments() {
 
   useEffect(() => {
     Promise.all([
-      base44.entities.Department.list('sort_order', 200),
-      base44.entities.Stage.list('number', 100),
+      base44.entities.Department.list(ENTITY_LIMITS.Department.sort, ENTITY_LIMITS.Department.limit),
+      base44.entities.Stage.list(ENTITY_LIMITS.Stage.sort, ENTITY_LIMITS.Stage.limit),
     ])
       .then(([depts, stages]) => {
         const stagesByDept = {};

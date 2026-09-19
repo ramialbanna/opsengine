@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Hand } from 'lucide-react';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 const FREQ_ORDER = ['Continuous', 'Multiple times daily', 'Daily', 'Weekly', 'Monthly'];
 
@@ -9,8 +10,8 @@ export default function Controls() {
 
   useEffect(() => {
     Promise.all([
-      base44.entities.Control.list('name', 200),
-      base44.entities.Role.list('title', 200),
+      base44.entities.Control.list(ENTITY_LIMITS.Control.sort, ENTITY_LIMITS.Control.limit),
+      base44.entities.Role.list(ENTITY_LIMITS.Role.sort, ENTITY_LIMITS.Role.limit),
     ])
       .then(([controls, roles]) => {
         const roleMap = {};

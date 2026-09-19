@@ -7,6 +7,7 @@ import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
 import DocFeedbackButton from '@/components/DocFeedbackButton';
 import LoadError from '@/components/LoadError';
 import { Printer, ArrowLeft, AlertTriangle } from 'lucide-react';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 function Meta({ label, children }) {
   if (!children) return null;
@@ -29,10 +30,10 @@ export default function ProcedureDetail() {
         const proc = await base44.entities.Procedure.get(id);
         if (!proc) { setState('notfound'); return; }
         const [stages, depts, roles, systems] = await Promise.all([
-          base44.entities.Stage.list('number', 100),
-          base44.entities.Department.list(),
-          base44.entities.Role.list(),
-          base44.entities.System.list(),
+          base44.entities.Stage.list(ENTITY_LIMITS.Stage.sort, ENTITY_LIMITS.Stage.limit),
+          base44.entities.Department.list(ENTITY_LIMITS.Department.sort, ENTITY_LIMITS.Department.limit),
+          base44.entities.Role.list(ENTITY_LIMITS.Role.sort, ENTITY_LIMITS.Role.limit),
+          base44.entities.System.list(ENTITY_LIMITS.System.sort, ENTITY_LIMITS.System.limit),
         ]);
         const stage = stages.find((s) => s.id === proc.stage);
         const dept = depts.find((d) => d.id === proc.department);

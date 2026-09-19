@@ -4,6 +4,7 @@ import { base44 } from '@/api/base44Client';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
 import { ClipboardList } from 'lucide-react';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 function missingFields(p) {
   const missing = [];
@@ -23,8 +24,8 @@ export default function OpenItems() {
     (async () => {
       try {
         const [procedures, departments] = await Promise.all([
-          base44.entities.Procedure.list('-updated_date', 500),
-          base44.entities.Department.list(),
+          base44.entities.Procedure.list(ENTITY_LIMITS.Procedure.sort, ENTITY_LIMITS.Procedure.limit),
+          base44.entities.Department.list(ENTITY_LIMITS.Department.sort, ENTITY_LIMITS.Department.limit),
         ]);
         const deptMap = {};
         departments.forEach((d) => { deptMap[d.id] = d; });

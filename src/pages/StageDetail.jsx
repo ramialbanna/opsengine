@@ -9,6 +9,7 @@ import LoadError from '@/components/LoadError';
 import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
 import DocFeedbackButton from '@/components/DocFeedbackButton';
 import { ArrowLeft, ArrowRight, ChevronRight, Layers, Lock } from 'lucide-react';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 function Field({ label, value }) {
   if (!value) return null;
@@ -106,11 +107,11 @@ export default function StageDetail() {
         const stage = matches[0];
         if (!stage) { setNotFound(true); return; }
         const [depts, stagesAll, procedures, gates, roles] = await Promise.all([
-          base44.entities.Department.list(),
-          base44.entities.Stage.list('number', 100),
-          base44.entities.Procedure.list('-updated_date', 200),
-          base44.entities.Gate.list('-updated_date', 200),
-          base44.entities.Role.list(),
+          base44.entities.Department.list(ENTITY_LIMITS.Department.sort, ENTITY_LIMITS.Department.limit),
+          base44.entities.Stage.list(ENTITY_LIMITS.Stage.sort, ENTITY_LIMITS.Stage.limit),
+          base44.entities.Procedure.list(ENTITY_LIMITS.Procedure.sort, ENTITY_LIMITS.Procedure.limit),
+          base44.entities.Gate.list(ENTITY_LIMITS.Gate.sort, ENTITY_LIMITS.Gate.limit),
+          base44.entities.Role.list(ENTITY_LIMITS.Role.sort, ENTITY_LIMITS.Role.limit),
         ]);
         const sorted = stagesAll.sort((a, b) => a.number - b.number);
         const idx = sorted.findIndex((s) => s.id === stage.id);

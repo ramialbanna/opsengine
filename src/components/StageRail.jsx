@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 export default function StageRail() {
   const [stages, setStages] = useState(null);
@@ -10,8 +11,8 @@ export default function StageRail() {
     (async () => {
       try {
         const [stageList, deptList] = await Promise.all([
-          base44.entities.Stage.list('number', 100),
-          base44.entities.Department.list(),
+          base44.entities.Stage.list(ENTITY_LIMITS.Stage.sort, ENTITY_LIMITS.Stage.limit),
+          base44.entities.Department.list(ENTITY_LIMITS.Department.sort, ENTITY_LIMITS.Department.limit),
         ]);
         const map = {};
         deptList.forEach((d) => { map[d.id] = d; });

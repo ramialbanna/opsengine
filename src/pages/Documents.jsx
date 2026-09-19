@@ -3,6 +3,7 @@ import { base44 } from '@/api/base44Client';
 import Markdown from '@/components/Markdown';
 import { AlertTriangle, Pin } from 'lucide-react';
 import { groupStyleForCode } from '@/lib/scenarioGroups';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 const STANDING_RULES = [
   'Black or blue ink only.',
@@ -62,8 +63,8 @@ export default function Documents() {
 
   useEffect(() => {
     Promise.all([
-      base44.entities.DocumentArtifact.list('-updated_date', 500),
-      base44.entities.DealScenario.list('code', 200),
+      base44.entities.DocumentArtifact.list(ENTITY_LIMITS.DocumentArtifact.sort, ENTITY_LIMITS.DocumentArtifact.limit),
+      base44.entities.DealScenario.list(ENTITY_LIMITS.DealScenario.sort, ENTITY_LIMITS.DealScenario.limit),
     ])
       .then(([docs, scenarios]) => {
         const docScenarios = {};

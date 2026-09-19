@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { ChevronRight } from 'lucide-react';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 function buildChain(role, roleMap) {
   const chain = [];
@@ -46,8 +47,8 @@ export default function Roles() {
 
   useEffect(() => {
     Promise.all([
-      base44.entities.Role.list('title', 300),
-      base44.entities.Department.list(),
+      base44.entities.Role.list(ENTITY_LIMITS.Role.sort, ENTITY_LIMITS.Role.limit),
+      base44.entities.Department.list(ENTITY_LIMITS.Department.sort, ENTITY_LIMITS.Department.limit),
     ])
       .then(([roles, depts]) => {
         const deptMap = {};

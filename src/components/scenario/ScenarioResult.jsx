@@ -21,8 +21,11 @@ function Divider({ children }) {
 }
 
 export default function ScenarioResult({ scenario, docMap, onRestart, onPickAnother }) {
-  const initial = (scenario.initial_submission_set || []).map((id) => docMap[id]).filter(Boolean);
-  const final = (scenario.final_submission_set || []).map((id) => docMap[id]).filter(Boolean);
+  const initialIds = scenario.initial_submission_set || [];
+  const finalIds = scenario.final_submission_set || [];
+  const initial = initialIds.map((id) => docMap[id]).filter(Boolean);
+  const final = finalIds.map((id) => docMap[id]).filter(Boolean);
+  const unresolvedCount = (initialIds.length - initial.length) + (finalIds.length - final.length);
   const isCashier = scenario.lien_satisfaction_method === "Cashier's cheque to lienholder";
 
   return (
@@ -36,6 +39,10 @@ export default function ScenarioResult({ scenario, docMap, onRestart, onPickAnot
           <h1 className="font-heading text-xl font-bold leading-tight tracking-tight">{scenario.name}</h1>
         </div>
       </div>
+
+      {unresolvedCount > 0 && (
+        <p className="mt-4 text-sm font-medium text-destructive">One or more documents could not be loaded — refresh the page.</p>
+      )}
 
       <div className="mt-6">
         <StepHeader n={1} title="Initial submission" />

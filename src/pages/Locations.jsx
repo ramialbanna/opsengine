@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { MapPin } from 'lucide-react';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 function LocCard({ loc, retired }) {
   return (
@@ -27,7 +28,7 @@ export default function Locations() {
   const [items, setItems] = useState(null);
 
   useEffect(() => {
-    base44.entities.Location.list('name', 200).then(setItems).catch(() => setItems([]));
+    base44.entities.Location.list(ENTITY_LIMITS.Location.sort, ENTITY_LIMITS.Location.limit).then(setItems).catch(() => setItems([]));
   }, []);
 
   const active = items ? items.filter((l) => l.active !== false) : null;

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { Search, X, Hash, Layers, Building2, FileText, BookText, Users, ShieldCheck, Server, MapPin, GitBranch } from 'lucide-react';
 import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 const ORDER = ['dealScenario', 'stage', 'procedure', 'role', 'department', 'document', 'system', 'control', 'location', 'glossary'];
 const META = {
@@ -30,16 +31,16 @@ export default function HeaderSearch() {
   async function ensureCache() {
     if (cache.current) return cache.current;
     const [stages, procedures, departments, documents, glossary, roles, controls, systems, locations, scenarios] = await Promise.all([
-      base44.entities.Stage.list('number', 200),
-      base44.entities.Procedure.list('-updated_date', 200),
-      base44.entities.Department.list('name', 200),
-      base44.entities.DocumentArtifact.list('-updated_date', 200),
-      base44.entities.GlossaryTerm.list('term', 500),
-      base44.entities.Role.list('title', 200),
-      base44.entities.Control.list('name', 200),
-      base44.entities.System.list('name', 200),
-      base44.entities.Location.list('name', 200),
-      base44.entities.DealScenario.list('code', 200),
+      base44.entities.Stage.list(ENTITY_LIMITS.Stage.sort, ENTITY_LIMITS.Stage.limit),
+      base44.entities.Procedure.list(ENTITY_LIMITS.Procedure.sort, ENTITY_LIMITS.Procedure.limit),
+      base44.entities.Department.list(ENTITY_LIMITS.Department.sort, ENTITY_LIMITS.Department.limit),
+      base44.entities.DocumentArtifact.list(ENTITY_LIMITS.DocumentArtifact.sort, ENTITY_LIMITS.DocumentArtifact.limit),
+      base44.entities.GlossaryTerm.list(ENTITY_LIMITS.GlossaryTerm.sort, ENTITY_LIMITS.GlossaryTerm.limit),
+      base44.entities.Role.list(ENTITY_LIMITS.Role.sort, ENTITY_LIMITS.Role.limit),
+      base44.entities.Control.list(ENTITY_LIMITS.Control.sort, ENTITY_LIMITS.Control.limit),
+      base44.entities.System.list(ENTITY_LIMITS.System.sort, ENTITY_LIMITS.System.limit),
+      base44.entities.Location.list(ENTITY_LIMITS.Location.sort, ENTITY_LIMITS.Location.limit),
+      base44.entities.DealScenario.list(ENTITY_LIMITS.DealScenario.sort, ENTITY_LIMITS.DealScenario.limit),
     ]);
     const stageById = {};
     stages.forEach((s) => { stageById[s.id] = s; });

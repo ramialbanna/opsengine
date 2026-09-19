@@ -5,6 +5,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import LoadError from '@/components/LoadError';
 import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
 import { ArrowLeft, Users, Hash, ListChecks, Server, ShieldCheck } from 'lucide-react';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 function Section({ icon: Icon, title, count, children }) {
   return (
@@ -36,11 +37,11 @@ export default function DepartmentDetail() {
         const dept = await base44.entities.Department.get(id);
         if (!dept) { setNotFound(true); return; }
         const [stages, roles, procedures, controls, systems] = await Promise.all([
-          base44.entities.Stage.list('number', 100),
-          base44.entities.Role.list(),
-          base44.entities.Procedure.list('-updated_date', 200),
-          base44.entities.Control.list('-updated_date', 200),
-          base44.entities.System.list('-updated_date', 200),
+          base44.entities.Stage.list(ENTITY_LIMITS.Stage.sort, ENTITY_LIMITS.Stage.limit),
+          base44.entities.Role.list(ENTITY_LIMITS.Role.sort, ENTITY_LIMITS.Role.limit),
+          base44.entities.Procedure.list(ENTITY_LIMITS.Procedure.sort, ENTITY_LIMITS.Procedure.limit),
+          base44.entities.Control.list(ENTITY_LIMITS.Control.sort, ENTITY_LIMITS.Control.limit),
+          base44.entities.System.list(ENTITY_LIMITS.System.sort, ENTITY_LIMITS.System.limit),
         ]);
         const roleMap = {};
         roles.forEach((r) => { roleMap[r.id] = r; });

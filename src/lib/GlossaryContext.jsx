@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
+import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 const GlossaryContext = createContext(null);
 
@@ -12,7 +13,7 @@ export function GlossaryProvider({ children }) {
   const [retryKey, setRetryKey] = useState(0);
   useEffect(() => {
     let alive = true;
-    base44.entities.GlossaryTerm.list('term', 500)
+    base44.entities.GlossaryTerm.list(ENTITY_LIMITS.GlossaryTerm.sort, ENTITY_LIMITS.GlossaryTerm.limit)
       .then((t) => { if (alive) setState({ terms: t, status: 'loaded' }); })
       .catch(() => { if (alive) setState({ terms: null, status: 'failed' }); });
     return () => { alive = false; };
