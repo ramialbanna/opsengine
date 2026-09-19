@@ -72,7 +72,7 @@ export default function ProcedureDetail() {
   /** @type {Array<{ label: string; to?: string }>} */
   const crumbs = [
     { label: 'Home', to: '/' },
-    { label: 'Stages', to: '/' },
+    { label: 'The twelve stages', to: '/stages' },
   ];
   if (stage) crumbs.push({ label: stage.name, to: `/stages/${stage.number}` });
   crumbs.push({ label: proc.title });

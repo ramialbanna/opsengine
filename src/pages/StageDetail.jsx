@@ -154,7 +154,7 @@ export default function StageDetail() {
 
   return (
     <div>
-      <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Stages', to: '/' }, { label: stage.name }]} />
+      <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'The twelve stages', to: '/stages' }, { label: stage.name }]} />
 
       <div className="mt-4 flex items-start gap-3.5">
         <div className="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-primary font-heading text-lg font-bold text-primary-foreground">

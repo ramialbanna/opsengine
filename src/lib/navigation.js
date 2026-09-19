@@ -40,5 +40,3 @@ export const navGroups = [
     ],
   },
 ];
-
-export const allSections = navGroups.flatMap((group) => group.items);
