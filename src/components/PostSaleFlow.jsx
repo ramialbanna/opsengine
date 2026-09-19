@@ -164,7 +164,7 @@ function MoneyTrack({ deadlineRule }) {
 }
 
 export default function PostSaleFlow() {
-  const rules = useStandingRules('Post-sale');
+  const { rules, status: rulesStatus } = useStandingRules('Post-sale');
   return (
     <section className="mt-8">
       <h2 className="font-heading text-lg font-bold tracking-tight">What happens after a unit sells</h2>
@@ -190,11 +190,13 @@ export default function PostSaleFlow() {
         </div>
       </div>
 
-      {rules.length > 1 && (
+      {rulesStatus === 'failed' ? (
+        <p className="mt-5 text-xs leading-relaxed text-muted-foreground">Standing rules couldn't be loaded — refresh the page.</p>
+      ) : rules.length > 1 ? (
         <div className="mt-5 space-y-1 text-xs leading-relaxed text-muted-foreground">
           {rules.slice(1).map((r, i) => <p key={i}>{r}</p>)}
         </div>
-      )}
+      ) : null}
 
       <p className="mt-5 text-center text-xs leading-relaxed text-muted-foreground">
         The three tracks run at the same time and close independently. A unit is not finished when it sells —

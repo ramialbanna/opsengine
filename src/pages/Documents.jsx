@@ -54,7 +54,7 @@ function DocCard({ doc, scenarios }) {
 
 export default function Documents() {
   const [data, setData] = useState(null);
-  const rules = useStandingRules('Legal documents');
+  const { rules, status: rulesStatus } = useStandingRules('Legal documents');
 
   useEffect(() => {
     Promise.all([
@@ -88,7 +88,9 @@ export default function Documents() {
         Every document TAV collects, when it is collected, and which deals require it.
       </p>
 
-      {rules.length > 0 && (
+      {rulesStatus === 'failed' ? (
+        <p className="mt-5 text-sm text-muted-foreground">Standing rules couldn't be loaded — refresh the page.</p>
+      ) : rules.length > 0 ? (
         <div className="mt-5 rounded-lg border-2 border-amber-300 bg-amber-50 p-4 dark:border-amber-900 dark:bg-amber-950/40">
           <div className="mb-2 flex items-center gap-2">
             <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
@@ -103,7 +105,7 @@ export default function Documents() {
             ))}
           </ul>
         </div>
-      )}
+      ) : null}
 
       <section className="mt-8">
         <div className="mb-3 flex items-center gap-2">

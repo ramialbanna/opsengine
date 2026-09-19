@@ -22,7 +22,7 @@ function Divider({ children }) {
 }
 
 export default function ScenarioResult({ scenario, docMap, onRestart, onPickAnother }) {
-  const dealRules = useStandingRules('Deal scenarios');
+  const { rules: dealRules, status: dealRulesStatus } = useStandingRules('Deal scenarios');
   const initialIds = scenario.initial_submission_set || [];
   const finalIds = scenario.final_submission_set || [];
   const initial = initialIds.map((id) => docMap[id]).filter(Boolean);
@@ -84,7 +84,9 @@ export default function ScenarioResult({ scenario, docMap, onRestart, onPickAnot
         </div>
       )}
 
-      {dealRules.length > 0 && (
+      {dealRulesStatus === 'failed' ? (
+        <p className="mt-6 text-sm text-muted-foreground">Standing rules couldn't be loaded — refresh the page.</p>
+      ) : dealRules.length > 0 ? (
         <div className="mt-6 rounded-lg border-2 border-amber-300 bg-amber-50 p-4 dark:border-amber-900 dark:bg-amber-950/40">
           <div className="flex items-start gap-2.5">
             <Info className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
@@ -93,7 +95,7 @@ export default function ScenarioResult({ scenario, docMap, onRestart, onPickAnot
             </div>
           </div>
         </div>
-      )}
+      ) : null}
 
       <div className="mt-6 flex flex-wrap gap-3">
         <button onClick={onRestart} className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">

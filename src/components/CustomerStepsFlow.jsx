@@ -86,7 +86,7 @@ function NotConfirmedBranch() {
 }
 
 export default function CustomerStepsFlow() {
-  const rules = useStandingRules('Purchase execution');
+  const { rules, status: rulesStatus } = useStandingRules('Purchase execution');
   return (
     <section className="mt-8">
       <h2 className="font-heading text-lg font-bold tracking-tight">The four steps at the customer</h2>
@@ -123,11 +123,13 @@ export default function CustomerStepsFlow() {
         <EndBox>Unit delivered · keys together · paper tag in packet</EndBox>
       </div>
 
-      {rules.length > 0 && (
+      {rulesStatus === 'failed' ? (
+        <p className="mt-4 text-center text-xs leading-relaxed text-muted-foreground">Standing rules couldn't be loaded — refresh the page.</p>
+      ) : rules.length > 0 ? (
         <div className="mt-4 space-y-1 text-center text-xs leading-relaxed text-muted-foreground">
           {rules.map((r, i) => <p key={i}>{r}</p>)}
         </div>
-      )}
+      ) : null}
     </section>
   );
 }

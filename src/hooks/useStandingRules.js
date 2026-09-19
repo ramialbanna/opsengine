@@ -4,23 +4,30 @@ import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 /**
  * Fetches StandingRule records filtered by applies_to, sorted by sort_order.
- * Returns the fallback array until records arrive; stays on fallback if the
- * fetch fails or returns nothing.
+ * Returns { rules, status } where status is 'loading' | 'loaded' | 'failed'.
+ * On failure, rules is empty and status is 'failed' so callers can surface it.
  */
-export function useStandingRules(appliesTo, fallback = []) {
-  const [rules, setRules] = useState(fallback);
+export function useStandingRules(appliesTo) {
+  const [rules, setRules] = useState([]);
+  const [status, setStatus] = useState('loading');
 
   useEffect(() => {
     let alive = true;
+    setStatus('loading');
     base44.entities.StandingRule
       .filter({ applies_to: appliesTo }, ENTITY_LIMITS.StandingRule.sort, ENTITY_LIMITS.StandingRule.limit)
       .then((records) => {
-        if (!alive || !records || records.length === 0) return;
-        setRules(records.map((r) => r.rule_text));
+        if (!alive) return;
+        setRules(records ? records.map((r) => r.rule_text) : []);
+        setStatus('loaded');
       })
-      .catch(() => {});
+      .catch(() => {
+        if (!alive) return;
+        setRules([]);
+        setStatus('failed');
+      });
     return () => { alive = false; };
   }, [appliesTo]);
 
-  return rules;
+  return { rules, status };
 }
