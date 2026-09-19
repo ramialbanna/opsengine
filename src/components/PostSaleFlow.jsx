@@ -108,8 +108,6 @@ function BranchLabel({ children }) {
   );
 }
 
-const POST_SALE_FALLBACK = ['30 days to turn in the title, or the buyer may arbitrate'];
-
 function TitleTrack() {
   return (
     <div>
@@ -166,7 +164,7 @@ function MoneyTrack({ deadlineRule }) {
 }
 
 export default function PostSaleFlow() {
-  const rules = useStandingRules('Post-sale', POST_SALE_FALLBACK);
+  const rules = useStandingRules('Post-sale');
   return (
     <section className="mt-8">
       <h2 className="font-heading text-lg font-bold tracking-tight">What happens after a unit sells</h2>
@@ -188,7 +186,7 @@ export default function PostSaleFlow() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-5">
           <TitleTrack />
           <PsiTrack />
-          <MoneyTrack deadlineRule={rules[0]} />
+          <MoneyTrack deadlineRule={rules[0] || ''} />
         </div>
       </div>
 

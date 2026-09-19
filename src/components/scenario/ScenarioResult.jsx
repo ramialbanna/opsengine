@@ -4,10 +4,6 @@ import { groupStyleForCode } from '@/lib/scenarioGroups';
 import { RotateCcw, ListOrdered, Info } from 'lucide-react';
 import { useStandingRules } from '@/hooks/useStandingRules';
 
-const DEAL_RULES_FALLBACK = [
-  "If the title names two owners joined by AND, every owner signs every document. If joined by OR, one signer is enough. Collect a driver's licence for every person named on the title regardless of who signs.",
-];
-
 function StepHeader({ n, title }) {
   return (
     <div className="mb-3 flex items-center gap-2.5">
@@ -26,7 +22,7 @@ function Divider({ children }) {
 }
 
 export default function ScenarioResult({ scenario, docMap, onRestart, onPickAnother }) {
-  const dealRules = useStandingRules('Deal scenarios', DEAL_RULES_FALLBACK);
+  const dealRules = useStandingRules('Deal scenarios');
   const initialIds = scenario.initial_submission_set || [];
   const finalIds = scenario.final_submission_set || [];
   const initial = initialIds.map((id) => docMap[id]).filter(Boolean);
@@ -88,14 +84,16 @@ export default function ScenarioResult({ scenario, docMap, onRestart, onPickAnot
         </div>
       )}
 
-      <div className="mt-6 rounded-lg border-2 border-amber-300 bg-amber-50 p-4 dark:border-amber-900 dark:bg-amber-950/40">
-        <div className="flex items-start gap-2.5">
-          <Info className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
-          <div className="space-y-1 text-sm leading-relaxed text-foreground/90">
-            {dealRules.map((r, i) => <p key={i}>{r}</p>)}
+      {dealRules.length > 0 && (
+        <div className="mt-6 rounded-lg border-2 border-amber-300 bg-amber-50 p-4 dark:border-amber-900 dark:bg-amber-950/40">
+          <div className="flex items-start gap-2.5">
+            <Info className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
+            <div className="space-y-1 text-sm leading-relaxed text-foreground/90">
+              {dealRules.map((r, i) => <p key={i}>{r}</p>)}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="mt-6 flex flex-wrap gap-3">
         <button onClick={onRestart} className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">

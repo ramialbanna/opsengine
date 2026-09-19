@@ -6,13 +6,6 @@ import { groupStyleForCode } from '@/lib/scenarioGroups';
 import { ENTITY_LIMITS } from '@/lib/entity-limits';
 import { useStandingRules } from '@/hooks/useStandingRules';
 
-const STANDING_RULES = [
-  'Black or blue ink only.',
-  'No mark-throughs on legal documents — a mistake means a fresh form.',
-  'An original lien release must carry an original signature and be dated; a copy is not accepted.',
-  'A second signer is added on the form, not on a second form.',
-];
-
 const BADGES = [
   { key: 'legal_document', label: 'Legal' },
   { key: 'travels_back_physically', label: 'Original travels back' },
@@ -61,7 +54,7 @@ function DocCard({ doc, scenarios }) {
 
 export default function Documents() {
   const [data, setData] = useState(null);
-  const rules = useStandingRules('Legal documents', STANDING_RULES);
+  const rules = useStandingRules('Legal documents');
 
   useEffect(() => {
     Promise.all([
@@ -95,20 +88,22 @@ export default function Documents() {
         Every document TAV collects, when it is collected, and which deals require it.
       </p>
 
-      <div className="mt-5 rounded-lg border-2 border-amber-300 bg-amber-50 p-4 dark:border-amber-900 dark:bg-amber-950/40">
-        <div className="mb-2 flex items-center gap-2">
-          <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-          <h2 className="font-heading text-sm font-semibold uppercase tracking-wider text-amber-800 dark:text-amber-300">Standing rules</h2>
+      {rules.length > 0 && (
+        <div className="mt-5 rounded-lg border-2 border-amber-300 bg-amber-50 p-4 dark:border-amber-900 dark:bg-amber-950/40">
+          <div className="mb-2 flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+            <h2 className="font-heading text-sm font-semibold uppercase tracking-wider text-amber-800 dark:text-amber-300">Standing rules</h2>
+          </div>
+          <ul className="space-y-1 text-sm leading-relaxed text-foreground/90">
+            {rules.map((r, i) => (
+              <li key={i} className="flex gap-2">
+                <span className="shrink-0 text-amber-600 dark:text-amber-400">•</span>
+                <span>{r}</span>
+              </li>
+            ))}
+          </ul>
         </div>
-        <ul className="space-y-1 text-sm leading-relaxed text-foreground/90">
-          {rules.map((r, i) => (
-            <li key={i} className="flex gap-2">
-              <span className="shrink-0 text-amber-600 dark:text-amber-400">•</span>
-              <span>{r}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      )}
 
       <section className="mt-8">
         <div className="mb-3 flex items-center gap-2">

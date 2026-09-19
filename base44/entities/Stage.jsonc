@@ -55,6 +55,16 @@
       "format": "markdown",
       "description": "Long-form description of the stage, how it works, and its place in the flow."
     },
+    "diagram": {
+      "type": "string",
+      "enum": [
+        "none",
+        "customer_steps",
+        "post_sale"
+      ],
+      "default": "none",
+      "description": "Which diagram component to render on this stage's detail page."
+    },
     "sort_order": {
       "type": "number",
       "description": "Display order for listings."

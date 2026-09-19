@@ -1,10 +1,6 @@
 import { ChevronDown, Lock, Diamond, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { useStandingRules } from '@/hooks/useStandingRules';
 
-const FLOW_FALLBACK = [
-  "Steps run in order. Each gate opens only when the evidence set for that deal's scenario has been received and confirmed.",
-];
-
 function Arrow({ label, size = 'h-5 w-5' }) {
   return (
     <div className="flex flex-col items-center gap-0.5 py-1">
@@ -90,7 +86,7 @@ function NotConfirmedBranch() {
 }
 
 export default function CustomerStepsFlow() {
-  const rules = useStandingRules('Purchase execution', FLOW_FALLBACK);
+  const rules = useStandingRules('Purchase execution');
   return (
     <section className="mt-8">
       <h2 className="font-heading text-lg font-bold tracking-tight">The four steps at the customer</h2>
@@ -127,9 +123,11 @@ export default function CustomerStepsFlow() {
         <EndBox>Unit delivered · keys together · paper tag in packet</EndBox>
       </div>
 
-      <div className="mt-4 space-y-1 text-center text-xs leading-relaxed text-muted-foreground">
-        {rules.map((r, i) => <p key={i}>{r}</p>)}
-      </div>
+      {rules.length > 0 && (
+        <div className="mt-4 space-y-1 text-center text-xs leading-relaxed text-muted-foreground">
+          {rules.map((r, i) => <p key={i}>{r}</p>)}
+        </div>
+      )}
     </section>
   );
 }

@@ -181,8 +181,8 @@ export default function StageDetail() {
         </div>
       )}
 
-      {stage.number === 6 && <CustomerStepsFlow />}
-      {stage.number === 12 && <PostSaleFlow />}
+      {stage.diagram === 'customer_steps' && <CustomerStepsFlow />}
+      {stage.diagram === 'post_sale' && <PostSaleFlow />}
 
       {procedures.length > 0 && (
         <section className="mt-8">
