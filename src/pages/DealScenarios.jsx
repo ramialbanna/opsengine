@@ -124,7 +124,7 @@ export default function DealScenarios() {
   }
 
   function selectOption(value) {
-    const newAnswers = { ...answers, [currentKey]: value };
+    const newAnswers = { ...answers, [QUESTIONS[currentKey].key]: value };
     const next = nextQuestionKey(currentKey, newAnswers);
     if (!next) {
       const m = matchScenario(data.scenarios, newAnswers);
