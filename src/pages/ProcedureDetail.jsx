@@ -4,6 +4,7 @@ import { base44 } from '@/api/base44Client';
 import Markdown from '@/components/Markdown';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
+import DocFeedbackButton from '@/components/DocFeedbackButton';
 import { Printer, ArrowLeft, AlertTriangle } from 'lucide-react';
 
 function Meta({ label, children }) {
@@ -142,6 +143,8 @@ export default function ProcedureDetail() {
           </section>
         )}
       </article>
+
+      <DocFeedbackButton pageRef={`Procedure: ${proc.title} (/procedures/${id})`} />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import CustomerStepsFlow from '@/components/CustomerStepsFlow';
 import PostSaleFlow from '@/components/PostSaleFlow';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
+import DocFeedbackButton from '@/components/DocFeedbackButton';
 import { ArrowLeft, ArrowRight, ChevronRight, Layers, Lock } from 'lucide-react';
 
 function Field({ label, value }) {
@@ -205,6 +206,8 @@ export default function StageDetail() {
       )}
 
       <StageNav prev={prev} next={next} />
+
+      <DocFeedbackButton pageRef={`Stage ${stage.number} — ${stage.name} (/stages/${stage.number})`} />
     </div>
   );
 }

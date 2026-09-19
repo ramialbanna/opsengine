@@ -1,0 +1,24 @@
+{
+  "name": "DocFeedback",
+  "type": "object",
+  "properties": {
+    "page_ref": {
+      "type": "string",
+      "description": "The page or record this feedback refers to."
+    },
+    "note": {
+      "type": "string",
+      "format": "textarea",
+      "description": "The staff member's note about what is wrong or out of date."
+    },
+    "date_submitted": {
+      "type": "string",
+      "format": "date",
+      "description": "The date the feedback was submitted."
+    }
+  },
+  "required": [
+    "page_ref",
+    "note"
+  ]
+}
