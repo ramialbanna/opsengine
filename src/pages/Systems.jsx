@@ -69,11 +69,7 @@ export default function Systems() {
                       const stage = data.stageMap[p.stage];
                       return (
                         <li key={p.id} className="text-sm">
-                          {stage ? (
-                            <Link to={`/stages/${stage.number}`} className="text-brand hover:underline">{p.title}</Link>
-                          ) : (
-                            <span>{p.title}</span>
-                          )}
+                          <Link to={`/procedures/${p.id}`} className="text-brand hover:underline">{p.title}</Link>
                           {stage && <span className="text-muted-foreground"> · {stage.name}</span>}
                         </li>
                       );

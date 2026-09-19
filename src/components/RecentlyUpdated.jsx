@@ -12,7 +12,7 @@ const SOURCES = [
   { entity: 'Role', typeLabel: 'Role', title: (r) => r.title, link: null },
   { entity: 'System', typeLabel: 'System', title: (r) => r.name, link: null },
   { entity: 'Location', typeLabel: 'Location', title: (r) => r.name, link: null },
-  { entity: 'GlossaryTerm', typeLabel: 'Glossary term', title: (r) => r.term, link: (r) => `/glossary#${r.id}` },
+  { entity: 'GlossaryTerm', typeLabel: 'Glossary term', title: (r) => r.term, link: (r) => `/glossary#term-${r.id}` },
   { entity: 'DealScenario', typeLabel: 'Deal scenario', title: (r) => `${r.code} · ${r.name}`, link: (r) => `/deal-scenarios/${r.code}` },
   { entity: 'DocumentArtifact', typeLabel: 'Document', title: (r) => r.name, link: null },
   { entity: 'TitleState', typeLabel: 'Title state', title: (r) => r.state_name, link: null },

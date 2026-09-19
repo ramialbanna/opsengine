@@ -88,9 +88,9 @@ export default function HeaderSearch() {
     if (r.type === 'stage') navigate(`/stages/${r.ref.number}`);
     else if (r.type === 'procedure') {
       navigate(`/procedures/${r.ref.id}`);
-    } else if (r.type === 'department') navigate('/departments');
-    else if (r.type === 'document') navigate('/deal-scenarios');
-    else if (r.type === 'glossary') navigate('/glossary');
+    } else if (r.type === 'department') navigate(`/departments/${r.ref.id}`);
+    else if (r.type === 'document') navigate('/documents');
+    else if (r.type === 'glossary') navigate(`/glossary#term-${r.ref.id}`);
   }
 
   const grouped = ORDER
