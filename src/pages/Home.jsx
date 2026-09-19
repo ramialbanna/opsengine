@@ -8,8 +8,9 @@ import { Building2, FileText, BookText, ArrowRight } from 'lucide-react';
 import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 function buildFlowchart(stages) {
+  const safeLabel = (name) => String(name ?? '').replace(/"/g, '&quot;').replace(/[\]\[<>|#]/g, '');
   const sorted = [...stages].sort((a, b) => a.number - b.number);
-  const nodes = sorted.map((s) => `    S${s.number}["${s.number} · ${s.name}"]`).join('\n');
+  const nodes = sorted.map((s) => `    S${s.number}["${s.number} · ${safeLabel(s.name)}"]`).join('\n');
   const mainChainStages = sorted.filter((s) => s.number !== 4 && s.number !== 10);
   const mainChain = mainChainStages.map((s) => `S${s.number}`).join(' --> ');
   return `flowchart TD
