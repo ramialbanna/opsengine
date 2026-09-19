@@ -1,0 +1,33 @@
+{
+  "name": "PaymentInstrument",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Instrument name, e.g. Cashier's Cheque, ACH Transfer, Dealer Draft, Wire."
+    },
+    "which_bank_or_account_it_routes_to": {
+      "type": "string",
+      "format": "textarea",
+      "description": "Which bank or funding account the instrument routes through. Describes the routing, not the numbers."
+    },
+    "when_it_is_used": {
+      "type": "string",
+      "format": "textarea",
+      "description": "The situations in which this instrument is the right choice."
+    },
+    "who_executes_it": {
+      "type": "string",
+      "format": "textarea",
+      "description": "Which role is responsible for executing the instrument (by role, not person)."
+    },
+    "notes": {
+      "type": "string",
+      "format": "textarea",
+      "description": "Practical notes. Do not record account numbers, routing numbers, or balances."
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

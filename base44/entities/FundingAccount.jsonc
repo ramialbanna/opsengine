@@ -1,0 +1,33 @@
+{
+  "name": "FundingAccount",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Account name as referenced internally, e.g. Operating Account, Payoff Account, Auction Floor Plan."
+    },
+    "bank": {
+      "type": "string",
+      "description": "The bank that holds the account."
+    },
+    "purpose": {
+      "type": "string",
+      "format": "textarea",
+      "description": "What this account exists to fund. Describes what the account is for, not what is in it."
+    },
+    "which_role_may_draw_on_it": {
+      "type": "string",
+      "relation": "Role",
+      "description": "Role authorised to draw on this account. Links to a role, never a person."
+    },
+    "notes": {
+      "type": "string",
+      "format": "textarea",
+      "description": "Practical notes. Do not record account numbers, routing numbers, or balances."
+    }
+  },
+  "required": [
+    "name",
+    "bank"
+  ]
+}
