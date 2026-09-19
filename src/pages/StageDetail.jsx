@@ -8,7 +8,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import LoadError from '@/components/LoadError';
 import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
 import DocFeedbackButton from '@/components/DocFeedbackButton';
-import { ArrowLeft, ArrowRight, ChevronRight, Layers, Lock } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Layers, Lock } from 'lucide-react';
 import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
 function Field({ label, value }) {
