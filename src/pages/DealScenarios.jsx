@@ -1,31 +1,105 @@
 import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
+import ScenarioResult from '@/components/scenario/ScenarioResult';
+import { ChevronRight, ChevronLeft, FileText, AlertCircle } from 'lucide-react';
 
-function Row({ label, value }) {
-  if (!value) return null;
-  return (
-    <div className="flex gap-2 text-sm">
-      <dt className="shrink-0 text-muted-foreground">{label}:</dt>
-      <dd className="text-foreground/90">{value}</dd>
-    </div>
-  );
+const QUESTIONS = {
+  title_status: {
+    key: 'title_status',
+    prompt: 'Does the customer have the title in hand, or is this a payoff?',
+    options: [
+      { label: 'Title in hand', value: 'Title in hand' },
+      { label: 'Payoff', value: 'Payoff' },
+    ],
+  },
+  title_holding_state: {
+    key: 'title_holding_state',
+    prompt: 'Is the vehicle titled in a title-holding state?',
+    list: ['Kentucky', 'Maryland', 'Michigan', 'Minnesota', 'Missouri', 'Montana', 'New York', 'Oklahoma', 'Wisconsin'],
+    note: 'Wisconsin applies where the lien was initiated on or after 30 July 2012.',
+    options: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+  },
+  original_lien_release: {
+    key: 'original_lien_release_obtained_today',
+    prompt: 'Will you get an original lien release today?',
+    options: [
+      { label: 'Yes', value: 'Yes' },
+      { label: 'No', value: 'No' },
+    ],
+  },
+  lien_method: {
+    key: 'lien_satisfaction_method',
+    prompt: 'How is the lien being satisfied?',
+    options: [
+      { label: 'Signed off on the title', value: 'Signed off on title' },
+      { label: 'Separate original lien release', value: 'Separate original release' },
+      { label: 'Mailed to TAV later', value: 'Mailed to TAV later' },
+      { label: "Cashier's cheque to the lienholder", value: "Cashier's cheque to lienholder" },
+    ],
+  },
+  seller_capacity: {
+    key: 'seller_capacity',
+    prompt: 'Who is the seller?',
+    options: [
+      { label: 'The individual owner', value: 'Individual' },
+      { label: 'The estate of someone deceased', value: 'Estate' },
+      { label: 'A trust', value: 'Trust' },
+      { label: 'A dealer', value: 'Dealer' },
+      { label: 'A business', value: 'Business' },
+    ],
+  },
+};
+
+function nextQuestionKey(currentKey, answers) {
+  switch (currentKey) {
+    case 'title_status':
+      return answers.title_status === 'Payoff' ? 'title_holding_state' : 'seller_capacity';
+    case 'title_holding_state':
+      return 'original_lien_release';
+    case 'original_lien_release':
+      return 'lien_method';
+    case 'lien_method':
+      return 'seller_capacity';
+    default:
+      return null;
+  }
 }
 
-function DocList({ label, ids, docMap }) {
-  const names = (ids || []).map((id) => docMap[id]?.name).filter(Boolean);
-  if (names.length === 0) return null;
+function matchScenario(scenarios, a) {
+  return scenarios.find((s) => {
+    if (s.title_status !== a.title_status) return false;
+    if (s.seller_capacity !== a.seller_capacity) return false;
+    if (a.title_status === 'Payoff') {
+      if (s.title_holding_state !== a.title_holding_state) return false;
+      if (s.original_lien_release_obtained_today !== a.original_lien_release_obtained_today) return false;
+      if (s.lien_satisfaction_method !== a.lien_satisfaction_method) return false;
+    }
+    return true;
+  });
+}
+
+function OptionButton({ label, onClick }) {
   return (
-    <div>
-      <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</div>
-      <ul className="mt-1 space-y-0.5 text-sm text-foreground/90">
-        {names.map((n) => <li key={n}>· {n}</li>)}
-      </ul>
-    </div>
+    <button
+      onClick={onClick}
+      className="flex w-full items-center justify-between rounded-xl border-2 border-border bg-card px-5 py-4 text-left text-lg font-medium transition-colors hover:border-brand active:bg-accent"
+    >
+      <span>{label}</span>
+      <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground" />
+    </button>
   );
 }
 
 export default function DealScenarios() {
   const [data, setData] = useState(null);
+  const [view, setView] = useState('home');
+  const [answers, setAnswers] = useState({});
+  const [currentKey, setCurrentKey] = useState('title_status');
+  const [history, setHistory] = useState([]);
+  const [scenario, setScenario] = useState(null);
 
   useEffect(() => {
     Promise.all([
@@ -40,42 +114,163 @@ export default function DealScenarios() {
       .catch(() => setData({ scenarios: [], docMap: {} }));
   }, []);
 
-  return (
-    <div>
-      <h1 className="font-heading text-2xl font-bold tracking-tight">Deal scenarios</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Find the scenario that matches your deal to see the documents it requires.
-      </p>
+  function startWizard() {
+    setAnswers({});
+    setHistory([]);
+    setCurrentKey('title_status');
+    setView('wizard');
+  }
 
-      {data === null ? (
-        <div className="mt-6 h-40 animate-pulse rounded-lg bg-muted/40" />
-      ) : data.scenarios.length === 0 ? (
-        <p className="mt-6 text-sm text-muted-foreground">No deal scenarios defined yet.</p>
-      ) : (
-        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {data.scenarios.map((s) => (
-            <div key={s.id} className="rounded-lg border border-border bg-card p-5">
-              <div className="flex items-center gap-2.5">
-                <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-primary px-2 font-heading text-xs font-bold text-primary-foreground">
-                  {s.code}
-                </div>
-                <h2 className="font-heading text-base font-semibold leading-tight">{s.name}</h2>
-              </div>
-              <dl className="mt-3 space-y-1">
-                <Row label="Title" value={s.title_status} />
-                <Row label="Seller" value={s.seller_capacity} />
-                <Row label="Lien method" value={s.lien_satisfaction_method} />
-                <Row label="Title-holding state" value={s.title_holding_state} />
-                <Row label="Lien release today" value={s.original_lien_release_obtained_today} />
-              </dl>
-              <div className="mt-3 space-y-3 border-t border-border pt-3">
-                <DocList label="Initial submission" ids={s.initial_submission_set} docMap={data.docMap} />
-                <DocList label="Final submission" ids={s.final_submission_set} docMap={data.docMap} />
-              </div>
+  function selectOption(value) {
+    const newAnswers = { ...answers, [currentKey]: value };
+    const next = nextQuestionKey(currentKey, newAnswers);
+    if (!next) {
+      const m = matchScenario(data.scenarios, newAnswers);
+      setAnswers(newAnswers);
+      if (m) { setScenario(m); setView('results'); }
+      else { setView('noMatch'); }
+    } else {
+      setAnswers(newAnswers);
+      setHistory((h) => [...h, currentKey]);
+      setCurrentKey(next);
+    }
+  }
+
+  function goBack() {
+    if (history.length === 0) { setView('home'); return; }
+    const prev = history[history.length - 1];
+    setHistory((h) => h.slice(0, -1));
+    setCurrentKey(prev);
+  }
+
+  function restart() {
+    setAnswers({});
+    setHistory([]);
+    setCurrentKey('title_status');
+    setScenario(null);
+    setView('home');
+  }
+
+  function pickCode(s) {
+    setScenario(s);
+    setView('results');
+  }
+
+  if (!data) {
+    return <div className="h-48 animate-pulse rounded-lg bg-muted/40" />;
+  }
+
+  if (view === 'home') {
+    return (
+      <div>
+        <div className="rounded-lg border border-border bg-card p-6">
+          <div className="grid h-12 w-12 place-items-center rounded-md bg-primary text-primary-foreground">
+            <FileText className="h-6 w-6" />
+          </div>
+          <h1 className="mt-4 font-heading text-2xl font-bold tracking-tight">What documents do I need?</h1>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Answer a few questions to find the exact documents this deal requires. Nothing is saved —
+            this is a lookup, not a record.
+          </p>
+          {data.scenarios.length === 0 ? (
+            <p className="mt-5 text-sm text-muted-foreground">No deal scenarios have been documented yet.</p>
+          ) : (
+            <div className="mt-5 space-y-2.5">
+              <OptionButton label="Help me find it" onClick={startWizard} />
+              <OptionButton label="I already know the code" onClick={() => setView('codes')} />
             </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (view === 'codes') {
+    return (
+      <div>
+        <button onClick={() => setView('home')} className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+          <ChevronLeft className="h-4 w-4" /> Back
+        </button>
+        <h1 className="font-heading text-xl font-bold tracking-tight">Pick your scenario code</h1>
+        <p className="mt-1 text-sm text-muted-foreground">Tap the code you already have.</p>
+        <div className="mt-5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+          {data.scenarios.map((s) => (
+            <button
+              key={s.id}
+              onClick={() => pickCode(s)}
+              className="flex items-center gap-3 rounded-xl border-2 border-border bg-card p-4 text-left transition-colors hover:border-brand active:bg-accent"
+            >
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-primary text-sm font-bold text-primary-foreground">{s.code}</span>
+              <span className="min-w-0 font-heading text-sm font-semibold">{s.name}</span>
+            </button>
           ))}
         </div>
-      )}
-    </div>
+      </div>
+    );
+  }
+
+  if (view === 'wizard') {
+    const q = QUESTIONS[currentKey];
+    const total = answers.title_status ? (answers.title_status === 'Payoff' ? 5 : 2) : null;
+    const stepNum = history.length + 1;
+    return (
+      <div>
+        <div className="mb-4 flex items-center justify-between">
+          <button onClick={goBack} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+            <ChevronLeft className="h-4 w-4" /> Back
+          </button>
+          <span className="text-xs text-muted-foreground">
+            {total ? `Question ${stepNum} of ${total}` : `Question ${stepNum}`}
+          </span>
+        </div>
+        <h1 className="font-heading text-xl font-bold tracking-tight">{q.prompt}</h1>
+        {q.list && (
+          <div className="mt-3 rounded-md border border-border bg-muted/40 p-3">
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Title-holding states</div>
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
+              {q.list.map((st) => (
+                <span key={st} className="rounded-md border border-border bg-card px-2 py-0.5 text-xs">{st}</span>
+              ))}
+            </div>
+            {q.note && <p className="mt-2 text-xs text-muted-foreground">{q.note}</p>}
+          </div>
+        )}
+        <div className="mt-5 space-y-2.5">
+          {q.options.map((o) => (
+            <OptionButton key={o.value} label={o.label} onClick={() => selectOption(o.value)} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (view === 'noMatch') {
+    return (
+      <div>
+        <button onClick={restart} className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+          <ChevronLeft className="h-4 w-4" /> Back
+        </button>
+        <div className="rounded-lg border border-border bg-card p-6 text-center">
+          <AlertCircle className="mx-auto h-8 w-8 text-muted-foreground" />
+          <h1 className="mt-3 font-heading text-lg font-bold">No documented scenario matches</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            These answers don't match a documented deal scenario. Check with the office or try again.
+          </p>
+          <button onClick={restart} className="mt-4 inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">
+            Start over
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // results
+  return (
+    <ScenarioResult
+      scenario={scenario}
+      docMap={data.docMap}
+      onRestart={restart}
+      onPickAnother={() => setView('codes')}
+    />
   );
 }
