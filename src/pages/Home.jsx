@@ -1,10 +1,17 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { base44 } from '@/api/base44Client';
 import StageRail from '@/components/StageRail';
 import Mermaid from '@/components/Mermaid';
 import RecentlyUpdated from '@/components/RecentlyUpdated';
 import { Building2, FileText, BookText, ArrowRight } from 'lucide-react';
 
-const PROCESS_FLOW = `flowchart TD
+function buildFlowchart(stages) {
+  const sorted = [...stages].sort((a, b) => a.number - b.number);
+  const nodes = sorted.map((s) => `    S${s.number}["${s.number} · ${s.name}"]`).join('\n');
+  const mainChainStages = sorted.filter((s) => s.number !== 4 && s.number !== 10);
+  const mainChain = mainChainStages.map((s) => `S${s.number}`).join(' --> ');
+  return `flowchart TD
     D[Dealer]
     A[Auction]
     C[Consignment]
@@ -13,21 +20,13 @@ const PROCESS_FLOW = `flowchart TD
     A --> S1
     C --> S1
     CO --> S4
-    S1["1 · Sourcing & Appraisal"]
-    S2["2 · Deal Closing & Appointment"]
-    S3["3 · Deal Entry & Packet"]
-    S4["4 · Pre-Purchase Audit (consumer only)"]
-    S5["5 · Scheduling & Assignment"]
-    S6["6 · Purchase Execution"]
-    S7["7 · Inbound Logistics"]
-    S8["8 · Intake & Inventory Control"]
-    S9["9 · Reconditioning (conditional)"]
-    S10["10 · Cost Capture (spans 5–12)"]
-    S11["11 · Sale"]
-    S12["12 · Post-Sale Title · Collection · Arbitration"]
-    S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7 --> S8 --> S9 --> S11 --> S12
+${nodes}
+    ${mainChain}
+    S3 -->|consumer| S4
+    S4 --> S5
     S10 -.- S5
     S10 -.- S12`;
+}
 
 const entryPoints = [
   { to: '/departments', title: 'Find my department', desc: 'Browse the department directory — purpose, ownership, and roles.', icon: Building2 },
@@ -36,6 +35,14 @@ const entryPoints = [
 ];
 
 export default function Home() {
+  const [stages, setStages] = useState(null);
+
+  useEffect(() => {
+    base44.entities.Stage.list('number', 20)
+      .then(setStages)
+      .catch(() => setStages([]));
+  }, []);
+
   return (
     <div>
       <header className="mb-8">
@@ -59,7 +66,11 @@ export default function Home() {
           Process flow
         </h2>
         <div className="overflow-x-auto rounded-lg border border-border bg-card p-4 [&_svg]:max-w-none">
-          <Mermaid chart={PROCESS_FLOW} />
+          {stages && stages.length > 0 ? (
+            <Mermaid chart={buildFlowchart(stages)} />
+          ) : (
+            <div className="h-48 animate-pulse rounded-lg bg-muted/40" />
+          )}
         </div>
       </section>
 
