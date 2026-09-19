@@ -1,0 +1,44 @@
+{
+  "name": "Control",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Control name, e.g. Title Status Check, Recon QC Spot Check."
+    },
+    "what_it_checks": {
+      "type": "string",
+      "format": "textarea",
+      "description": "What this control verifies."
+    },
+    "frequency": {
+      "type": "string",
+      "enum": [
+        "Continuous",
+        "Multiple times daily",
+        "Daily",
+        "Weekly",
+        "Monthly"
+      ],
+      "description": "How often the control is performed."
+    },
+    "owner_role": {
+      "type": "string",
+      "relation": "Role",
+      "description": "Role that owns and runs the control."
+    },
+    "what_it_catches": {
+      "type": "string",
+      "format": "textarea",
+      "description": "The errors, risks, or exceptions this control is meant to catch."
+    },
+    "currently_manual": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the control is currently performed manually rather than automated."
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

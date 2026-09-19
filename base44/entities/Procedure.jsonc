@@ -1,0 +1,81 @@
+{
+  "name": "Procedure",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Procedure title."
+    },
+    "stage": {
+      "type": "string",
+      "relation": "Stage",
+      "description": "Stage this procedure belongs to."
+    },
+    "department": {
+      "type": "string",
+      "relation": "Department",
+      "description": "Department responsible for the procedure."
+    },
+    "role_responsible": {
+      "type": "string",
+      "relation": "Role",
+      "description": "Role responsible for carrying out the procedure."
+    },
+    "trigger": {
+      "type": "string",
+      "format": "textarea",
+      "description": "What starts this procedure."
+    },
+    "required_actions": {
+      "type": "string",
+      "format": "markdown",
+      "description": "The steps that must be performed, in order."
+    },
+    "required_inputs": {
+      "type": "string",
+      "format": "markdown",
+      "description": "What must be available before the procedure can run."
+    },
+    "outputs": {
+      "type": "string",
+      "format": "textarea",
+      "description": "What the procedure produces."
+    },
+    "decision_made": {
+      "type": "string",
+      "format": "textarea",
+      "description": "The decision reached by completing this procedure."
+    },
+    "systems_used": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "relation": "System"
+      },
+      "description": "Systems used while performing the procedure."
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "SOP",
+        "Stated by TAV",
+        "Referenced not held"
+      ],
+      "description": "Where this procedure's authority comes from."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Current",
+        "Draft",
+        "Needs review"
+      ],
+      "default": "Draft",
+      "description": "Editorial status of the procedure."
+    }
+  },
+  "required": [
+    "title",
+    "stage"
+  ]
+}

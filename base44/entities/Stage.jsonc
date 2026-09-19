@@ -1,0 +1,67 @@
+{
+  "name": "Stage",
+  "type": "object",
+  "properties": {
+    "number": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 12,
+      "description": "Stage number, 1 through 12, in the vehicle lifecycle."
+    },
+    "name": {
+      "type": "string",
+      "description": "Stage name, e.g. Sourcing, Transport, Receiving."
+    },
+    "owner_department": {
+      "type": "string",
+      "relation": "Department",
+      "description": "Department that owns this stage."
+    },
+    "purpose": {
+      "type": "string",
+      "format": "textarea",
+      "description": "What this stage exists to accomplish."
+    },
+    "entry_condition": {
+      "type": "string",
+      "format": "textarea",
+      "description": "What must be true for a vehicle to enter this stage."
+    },
+    "what_closes_it": {
+      "type": "string",
+      "format": "textarea",
+      "description": "What marks this stage as complete for a vehicle."
+    },
+    "handoff_to": {
+      "type": "string",
+      "relation": "Stage",
+      "description": "The next stage a vehicle moves to after this one closes."
+    },
+    "applies_to_channels": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Consumer",
+          "Dealer",
+          "Auction",
+          "Consignment"
+        ]
+      },
+      "description": "Which acquisition / disposal channels this stage applies to."
+    },
+    "detail": {
+      "type": "string",
+      "format": "markdown",
+      "description": "Long-form description of the stage, how it works, and its place in the flow."
+    },
+    "sort_order": {
+      "type": "number",
+      "description": "Display order for listings."
+    }
+  },
+  "required": [
+    "number",
+    "name"
+  ]
+}

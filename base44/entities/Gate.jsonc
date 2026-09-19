@@ -1,0 +1,44 @@
+{
+  "name": "Gate",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Gate name, e.g. Title Clear Gate, Recon Complete Gate."
+    },
+    "stage": {
+      "type": "string",
+      "relation": "Stage",
+      "description": "Stage this gate sits in."
+    },
+    "condition_that_opens_it": {
+      "type": "string",
+      "format": "textarea",
+      "description": "The condition that must be satisfied to pass the gate."
+    },
+    "what_it_releases": {
+      "type": "string",
+      "format": "textarea",
+      "description": "What becomes possible once the gate is passed."
+    },
+    "who_decides": {
+      "type": "string",
+      "format": "textarea",
+      "description": "Who has authority to open or sign off the gate (by role or department)."
+    },
+    "what_happens_on_failure": {
+      "type": "string",
+      "format": "textarea",
+      "description": "What occurs when the gate condition is not met."
+    },
+    "override_path": {
+      "type": "string",
+      "format": "textarea",
+      "description": "How a gate can be overridden, and by whom, when it cannot be satisfied normally."
+    }
+  },
+  "required": [
+    "name",
+    "stage"
+  ]
+}
