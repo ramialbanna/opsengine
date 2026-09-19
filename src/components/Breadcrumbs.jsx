@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 
+/**
+ * @param {{ items: Array<{ label: string; to?: string }> }} props
+ */
 export default function Breadcrumbs({ items }) {
   return (
     <nav aria-label="Breadcrumb" className="mb-4 flex flex-wrap items-center gap-1 text-xs text-muted-foreground print:hidden">

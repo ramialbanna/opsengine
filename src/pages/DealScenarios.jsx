@@ -98,7 +98,7 @@ function OptionButton({ label, onClick }) {
 export default function DealScenarios() {
   const [data, setData] = useState(null);
   const [view, setView] = useState('home');
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState(/** @type {Record<string, string>} */ ({}));
   const [currentKey, setCurrentKey] = useState('title_status');
   const [history, setHistory] = useState([]);
   const [scenario, setScenario] = useState(null);

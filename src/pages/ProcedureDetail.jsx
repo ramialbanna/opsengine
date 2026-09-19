@@ -21,7 +21,10 @@ function Meta({ label, children }) {
 
 export default function ProcedureDetail() {
   const { id } = useParams();
-  const [state, setState] = useState('loading');
+  /**
+   * @typedef {'loading' | 'notfound' | 'error' | { proc: any; stage: any; dept: any; role: any; systemMap: Record<string, any> }} ProcedureDetailState
+   */
+  const [state, setState] = useState(/** @type {ProcedureDetailState} */ ('loading'));
   const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
@@ -66,6 +69,7 @@ export default function ProcedureDetail() {
 
   const { proc, stage, dept, role, systemMap } = state;
 
+  /** @type {Array<{ label: string; to?: string }>} */
   const crumbs = [
     { label: 'Home', to: '/' },
     { label: 'Stages', to: '/' },

@@ -4,6 +4,9 @@ const STYLES = {
   'Needs review': 'text-red-700 border-red-300 bg-red-50 dark:text-red-300 dark:border-red-800 dark:bg-red-950/40',
 };
 
+/**
+ * @param {{ status?: string; className?: string }} props
+ */
 export default function ProcedureStatusBadge({ status, className }) {
   const value = status || 'Draft';
   return (

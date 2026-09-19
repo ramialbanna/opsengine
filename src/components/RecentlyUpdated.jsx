@@ -38,7 +38,7 @@ export default function RecentlyUpdated() {
         })
       );
       const all = results.flatMap((r) => (r.status === 'fulfilled' ? r.value : []));
-      all.sort((a, b) => new Date(b.updated_date) - new Date(a.updated_date));
+      all.sort((a, b) => new Date(b.updated_date).getTime() - new Date(a.updated_date).getTime());
       setItems(all.slice(0, 10));
     })();
   }, []);

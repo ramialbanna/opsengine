@@ -10,7 +10,10 @@ import { ENTITY_LIMITS } from '@/lib/entity-limits';
 export default function ScenarioDetail() {
   const { code } = useParams();
   const navigate = useNavigate();
-  const [state, setState] = useState('loading');
+  /**
+   * @typedef {'loading' | 'notfound' | 'error' | { scenario: any; docMap: Record<string, any> }} ScenarioDetailState
+   */
+  const [state, setState] = useState(/** @type {ScenarioDetailState} */ ('loading'));
   const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
