@@ -9,6 +9,7 @@ import {
   Wallet,
   Building2,
   BookOpen,
+  FileStack,
 } from 'lucide-react';
 
 export const navGroups = [
@@ -30,6 +31,12 @@ export const navGroups = [
     items: [
       { id: 'departments', label: 'Departments & Roles', path: '/departments', icon: Building2, description: 'Teams, responsibilities, and escalation.' },
       { id: 'onboarding', label: 'New Hire Onboarding', path: '/onboarding', icon: BookOpen, description: 'Role learning paths and ramp guides.' },
+    ],
+  },
+  {
+    label: 'Reference',
+    items: [
+      { id: 'documents', label: 'Document Library', path: '/documents', icon: FileStack, description: 'Every document, when it is collected, and the rules.' },
     ],
   },
 ];
