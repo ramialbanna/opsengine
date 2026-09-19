@@ -1,0 +1,33 @@
+{
+  "name": "TitleState",
+  "type": "object",
+  "properties": {
+    "state_name": {
+      "type": "string",
+      "description": "Full state name, e.g. Texas, California."
+    },
+    "two_letter_code": {
+      "type": "string",
+      "description": "Two-letter USPS state code, e.g. TX, CA."
+    },
+    "title_holding": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the state is a title-holding state."
+    },
+    "limited_access_for_records": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the state restricts access to title/registration records."
+    },
+    "special_rules": {
+      "type": "string",
+      "format": "textarea",
+      "description": "State-specific title and registration rules to be aware of."
+    }
+  },
+  "required": [
+    "state_name",
+    "two_letter_code"
+  ]
+}

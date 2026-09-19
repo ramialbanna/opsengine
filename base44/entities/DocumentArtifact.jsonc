@@ -1,0 +1,49 @@
+{
+  "name": "DocumentArtifact",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Document name, e.g. Original Title, Bill of Sale, Lien Release."
+    },
+    "what_it_is": {
+      "type": "string",
+      "format": "textarea",
+      "description": "What this document is and what it represents."
+    },
+    "when_it_is_collected": {
+      "type": "string",
+      "enum": [
+        "Initial submission",
+        "Final submission",
+        "Second submission",
+        "Tracking",
+        "Inspection"
+      ],
+      "description": "The point in the flow when this document is collected."
+    },
+    "completion_rules": {
+      "type": "string",
+      "format": "markdown",
+      "description": "Rules for how the document must be completed to be valid, in rich text."
+    },
+    "is_universal": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the document is required across all deal scenarios."
+    },
+    "legal_document": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is a legal document."
+    },
+    "travels_back_physically": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the original physical document must travel back to TAV."
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

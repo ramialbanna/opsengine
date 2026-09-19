@@ -1,0 +1,92 @@
+{
+  "name": "DealScenario",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "Scenario code, e.g. 1A, 1B, 1C, 2A\u20132D, 3A\u20133D, 4A\u20134D."
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable scenario name."
+    },
+    "title_status": {
+      "type": "string",
+      "enum": [
+        "Title in hand",
+        "Payoff"
+      ],
+      "description": "Whether the title is already in hand or this is a payoff scenario."
+    },
+    "title_holding_state": {
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No",
+        "Not applicable"
+      ],
+      "description": "Whether the seller's state is a title-holding state."
+    },
+    "original_lien_release_obtained_today": {
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No",
+        "Not applicable"
+      ],
+      "description": "Whether the original lien release is obtained at the time of purchase."
+    },
+    "lien_satisfaction_method": {
+      "type": "string",
+      "enum": [
+        "Signed off on title",
+        "Separate original release",
+        "Mailed to TAV later",
+        "Cashier's cheque to lienholder",
+        "Not applicable"
+      ],
+      "description": "How the lien is satisfied for this scenario."
+    },
+    "seller_capacity": {
+      "type": "string",
+      "enum": [
+        "Individual",
+        "Estate",
+        "Trust",
+        "Dealer",
+        "Business"
+      ],
+      "description": "The legal capacity in which the seller is acting."
+    },
+    "initial_submission_set": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "relation": "DocumentArtifact"
+      },
+      "description": "Documents collected at initial submission for this scenario."
+    },
+    "final_submission_set": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "relation": "DocumentArtifact"
+      },
+      "description": "Documents collected at final submission for this scenario."
+    },
+    "qa_instructions": {
+      "type": "string",
+      "format": "markdown",
+      "description": "QA guidance specific to this scenario, in rich text."
+    },
+    "notes": {
+      "type": "string",
+      "format": "textarea",
+      "description": "Additional notes about the scenario."
+    }
+  },
+  "required": [
+    "code",
+    "name"
+  ]
+}
