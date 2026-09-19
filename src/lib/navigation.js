@@ -13,6 +13,7 @@ import {
   Server,
   ShieldCheck,
   MapPin,
+  Users,
 } from 'lucide-react';
 
 export const navGroups = [
@@ -33,6 +34,7 @@ export const navGroups = [
     label: 'People',
     items: [
       { id: 'departments', label: 'Departments & Roles', path: '/departments', icon: Building2, description: 'Teams, responsibilities, and escalation.' },
+      { id: 'roles', label: 'Roles', path: '/roles', icon: Users, description: 'Who decides what, and who they go to.' },
       { id: 'onboarding', label: 'New Hire Onboarding', path: '/onboarding', icon: BookOpen, description: 'Role learning paths and ramp guides.' },
     ],
   },

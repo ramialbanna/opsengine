@@ -24,6 +24,7 @@ import Documents from '@/pages/Documents';
 import Systems from '@/pages/Systems';
 import Controls from '@/pages/Controls';
 import Locations from '@/pages/Locations';
+import Roles from '@/pages/Roles';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -72,6 +73,7 @@ const AuthenticatedApp = () => {
           <Route path="/systems" element={<Systems />} />
           <Route path="/controls" element={<Controls />} />
           <Route path="/locations" element={<Locations />} />
+          <Route path="/roles" element={<Roles />} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />
