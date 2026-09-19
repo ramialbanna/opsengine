@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import Markdown from '@/components/Markdown';
 import CustomerStepsFlow from '@/components/CustomerStepsFlow';
+import PostSaleFlow from '@/components/PostSaleFlow';
 import { ArrowLeft, ArrowRight, ChevronRight, Layers, Lock } from 'lucide-react';
 
 const STATUS_STYLES = {
@@ -183,6 +184,7 @@ export default function StageDetail() {
       )}
 
       {stage.number === 6 && <CustomerStepsFlow />}
+      {stage.number === 12 && <PostSaleFlow />}
 
       {procedures.length > 0 && (
         <section className="mt-8">
