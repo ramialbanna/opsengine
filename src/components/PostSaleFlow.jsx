@@ -153,12 +153,12 @@ function PsiTrack() {
   );
 }
 
-function MoneyTrack({ rules }) {
+function MoneyTrack({ deadlineRule }) {
   return (
     <div>
       <TrackHeader track="money" />
       <Connector />
-      <DeadlineBox>{rules.map((r, i) => <div key={i}>{r}</div>)}</DeadlineBox>
+      <DeadlineBox>{deadlineRule}</DeadlineBox>
       <Connector />
       <EndBox track="money">Monthly reconciliation — iDMS against the Manheim Selling Summary</EndBox>
     </div>
@@ -188,9 +188,15 @@ export default function PostSaleFlow() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-5">
           <TitleTrack />
           <PsiTrack />
-          <MoneyTrack rules={rules} />
+          <MoneyTrack deadlineRule={rules[0]} />
         </div>
       </div>
+
+      {rules.length > 1 && (
+        <div className="mt-5 space-y-1 text-xs leading-relaxed text-muted-foreground">
+          {rules.slice(1).map((r, i) => <p key={i}>{r}</p>)}
+        </div>
+      )}
 
       <p className="mt-5 text-center text-xs leading-relaxed text-muted-foreground">
         The three tracks run at the same time and close independently. A unit is not finished when it sells —

@@ -2,12 +2,7 @@ import { ChevronDown, Lock, Diamond, CheckCircle2, AlertTriangle } from 'lucide-
 import { useStandingRules } from '@/hooks/useStandingRules';
 
 const FLOW_FALLBACK = [
-  'Step 1 · Pre-Buy Inspection',
-  'Step 2 · QA Document & Deal Review',
-  'Funds may be released',
-  'Step 3 · Funds Distribution',
-  'You may leave the customer',
-  'Step 4 · Inventory Control',
+  "Steps run in order. Each gate opens only when the evidence set for that deal's scenario has been received and confirmed.",
 ];
 
 function Arrow({ label, size = 'h-5 w-5' }) {
@@ -106,7 +101,7 @@ export default function CustomerStepsFlow() {
       <div className="mt-5 mx-auto max-w-md">
         <PlainBox>Transporter arrives — meets the customer inside the bank</PlainBox>
         <Arrow />
-        <PlainBox>{rules[0]}</PlainBox>
+        <PlainBox>Step 1 · Pre-Buy Inspection</PlainBox>
         <Arrow />
 
         <div className="grid gap-3 sm:grid-cols-2 sm:items-start">
@@ -115,27 +110,26 @@ export default function CustomerStepsFlow() {
         </div>
 
         <Arrow label="Confirmed" />
-        <PlainBox>{rules[1]}</PlainBox>
+        <PlainBox>Step 2 · QA Document &amp; Deal Review</PlainBox>
         <Arrow />
         <PlainBox>Initial submission set</PlainBox>
         <Arrow />
-        <GateBox id="2a">{rules[2]}</GateBox>
+        <GateBox id="2a">Funds may be released</GateBox>
         <Arrow />
-        <PlainBox>{rules[3]}</PlainBox>
+        <PlainBox>Step 3 · Funds Distribution</PlainBox>
         <Arrow />
         <PlainBox>Final submission set</PlainBox>
         <Arrow />
-        <GateBox id="2b">{rules[4]}</GateBox>
+        <GateBox id="2b">You may leave the customer</GateBox>
         <Arrow />
-        <PlainBox>{rules[5]}</PlainBox>
+        <PlainBox>Step 4 · Inventory Control</PlainBox>
         <Arrow />
         <EndBox>Unit delivered · keys together · paper tag in packet</EndBox>
       </div>
 
-      <p className="mt-4 text-center text-xs leading-relaxed text-muted-foreground">
-        Steps run in order. Each gate opens only when the evidence set for that deal's scenario has been
-        received and confirmed.
-      </p>
+      <div className="mt-4 space-y-1 text-center text-xs leading-relaxed text-muted-foreground">
+        {rules.map((r, i) => <p key={i}>{r}</p>)}
+      </div>
     </section>
   );
 }
