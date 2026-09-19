@@ -21,7 +21,7 @@ function buildFlowchart(stages) {
     D --> S1
     A --> S1
     C --> S1
-    CO --> S4
+    CO --> S1
 ${nodes}
     ${mainChain}
     S3 -->|consumer| S4
