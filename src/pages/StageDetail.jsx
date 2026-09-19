@@ -5,6 +5,7 @@ import Markdown from '@/components/Markdown';
 import CustomerStepsFlow from '@/components/CustomerStepsFlow';
 import PostSaleFlow from '@/components/PostSaleFlow';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import LoadError from '@/components/LoadError';
 import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
 import DocFeedbackButton from '@/components/DocFeedbackButton';
 import { ArrowLeft, ArrowRight, ChevronRight, Layers, Lock } from 'lucide-react';
@@ -95,6 +96,8 @@ export default function StageDetail() {
   const { number } = useParams();
   const [data, setData] = useState(null);
   const [notFound, setNotFound] = useState(false);
+  const [error, setError] = useState(false);
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -126,10 +129,10 @@ export default function StageDetail() {
           roleMap,
         });
       } catch {
-        setNotFound(true);
+        setError(true);
       }
     })();
-  }, [number]);
+  }, [number, retryKey]);
 
   if (notFound) {
     return (
@@ -140,6 +143,9 @@ export default function StageDetail() {
         <p className="mt-4 text-sm text-muted-foreground">Stage {number} has not been defined yet.</p>
       </div>
     );
+  }
+  if (error) {
+    return <LoadError backTo="/" backLabel="All stages" onRetry={() => { setError(false); setRetryKey((k) => k + 1); }} />;
   }
   if (!data) return <div className="h-48 animate-pulse rounded-lg bg-muted/40" />;
 

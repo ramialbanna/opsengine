@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import LoadError from '@/components/LoadError';
 import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
 import { ArrowLeft, Users, Hash, ListChecks, Server, ShieldCheck } from 'lucide-react';
 
@@ -26,11 +27,14 @@ export default function DepartmentDetail() {
   const { id } = useParams();
   const [data, setData] = useState(null);
   const [notFound, setNotFound] = useState(false);
+  const [error, setError] = useState(false);
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     (async () => {
       try {
         const dept = await base44.entities.Department.get(id);
+        if (!dept) { setNotFound(true); return; }
         const [stages, roles, procedures, controls, systems] = await Promise.all([
           base44.entities.Stage.list('number', 100),
           base44.entities.Role.list(),
@@ -56,10 +60,10 @@ export default function DepartmentDetail() {
           stageMap,
         });
       } catch {
-        setNotFound(true);
+        setError(true);
       }
     })();
-  }, [id]);
+  }, [id, retryKey]);
 
   if (notFound) {
     return (
@@ -70,6 +74,9 @@ export default function DepartmentDetail() {
         <p className="mt-4 text-sm text-muted-foreground">Department not found.</p>
       </div>
     );
+  }
+  if (error) {
+    return <LoadError backTo="/departments" backLabel="All departments" onRetry={() => { setError(false); setRetryKey((k) => k + 1); }} />;
   }
   if (!data) return <div className="h-48 animate-pulse rounded-lg bg-muted/40" />;
 

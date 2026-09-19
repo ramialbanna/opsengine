@@ -5,6 +5,7 @@ import Markdown from '@/components/Markdown';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
 import DocFeedbackButton from '@/components/DocFeedbackButton';
+import LoadError from '@/components/LoadError';
 import { Printer, ArrowLeft, AlertTriangle } from 'lucide-react';
 
 function Meta({ label, children }) {
@@ -20,11 +21,13 @@ function Meta({ label, children }) {
 export default function ProcedureDetail() {
   const { id } = useParams();
   const [state, setState] = useState('loading');
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     (async () => {
       try {
         const proc = await base44.entities.Procedure.get(id);
+        if (!proc) { setState('notfound'); return; }
         const [stages, depts, roles, systems] = await Promise.all([
           base44.entities.Stage.list('number', 100),
           base44.entities.Department.list(),
@@ -38,10 +41,10 @@ export default function ProcedureDetail() {
         systems.forEach((s) => { systemMap[s.id] = s; });
         setState({ proc, stage, dept, role, systemMap });
       } catch {
-        setState('notfound');
+        setState('error');
       }
     })();
-  }, [id]);
+  }, [id, retryKey]);
 
   if (state === 'loading') return <div className="h-48 animate-pulse rounded-lg bg-muted/40" />;
 
@@ -54,6 +57,10 @@ export default function ProcedureDetail() {
         <p className="mt-4 text-sm text-muted-foreground">Procedure not found.</p>
       </div>
     );
+  }
+
+  if (state === 'error') {
+    return <LoadError backTo="/" backLabel="Back" onRetry={() => { setState('loading'); setRetryKey((k) => k + 1); }} />;
   }
 
   const { proc, stage, dept, role, systemMap } = state;
