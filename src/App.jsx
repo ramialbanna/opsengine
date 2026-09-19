@@ -21,6 +21,9 @@ import DealScenarios from '@/pages/DealScenarios';
 import Glossary from '@/pages/Glossary';
 import DepartmentDetail from '@/pages/DepartmentDetail';
 import Documents from '@/pages/Documents';
+import Systems from '@/pages/Systems';
+import Controls from '@/pages/Controls';
+import Locations from '@/pages/Locations';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -66,6 +69,9 @@ const AuthenticatedApp = () => {
           <Route path="/glossary" element={<Glossary />} />
           <Route path="/departments/:id" element={<DepartmentDetail />} />
           <Route path="/documents" element={<Documents />} />
+          <Route path="/systems" element={<Systems />} />
+          <Route path="/controls" element={<Controls />} />
+          <Route path="/locations" element={<Locations />} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />

@@ -10,6 +10,9 @@ import {
   Building2,
   BookOpen,
   FileStack,
+  Server,
+  ShieldCheck,
+  MapPin,
 } from 'lucide-react';
 
 export const navGroups = [
@@ -37,6 +40,9 @@ export const navGroups = [
     label: 'Reference',
     items: [
       { id: 'documents', label: 'Document Library', path: '/documents', icon: FileStack, description: 'Every document, when it is collected, and the rules.' },
+      { id: 'systems', label: 'Systems', path: '/systems', icon: Server, description: 'Every system we use and who uses it.' },
+      { id: 'controls', label: 'Controls', path: '/controls', icon: ShieldCheck, description: 'Checks that run in the business, by frequency.' },
+      { id: 'locations', label: 'Locations', path: '/locations', icon: MapPin, description: 'Our sites, including retired names.' },
     ],
   },
 ];
