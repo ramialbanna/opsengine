@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Lock, Loader2, AlertTriangle } from "lucide-react";
+import { Lock, Loader2, AlertTriangle, ArrowLeft } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 
 export default function ResetPassword() {
@@ -58,6 +58,11 @@ export default function ResetPassword() {
       icon={Lock}
       title="New password"
       subtitle="Enter your new password below"
+      footer={
+        <Link to="/login" className="text-primary font-medium hover:underline">
+          <ArrowLeft className="w-3 h-3 inline mr-1" />Back to log in
+        </Link>
+      }
     >
       {error && (
         <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">

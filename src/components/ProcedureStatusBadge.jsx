@@ -7,7 +7,7 @@ const STYLES = {
 export default function ProcedureStatusBadge({ status, className }) {
   const value = status || 'Draft';
   return (
-    <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-medium ${STYLES[value] || STYLES.Current} ${className || ''}`}>
+    <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-medium ${STYLES[value] || STYLES.Draft} ${className || ''}`}>
       {value}
     </span>
   );
