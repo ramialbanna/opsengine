@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import {
   Dialog,
@@ -17,9 +17,14 @@ export default function DocFeedbackButton({ pageRef }) {
   const [note, setNote] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [error, setError] = useState(false);
+  const closeTimer = useRef(null);
+
+  useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current); }, []);
 
   async function submit() {
     if (!note.trim()) return;
+    setError(false);
     setSubmitting(true);
     try {
       await base44.entities.DocFeedback.create({
@@ -30,12 +35,13 @@ export default function DocFeedbackButton({ pageRef }) {
       setNote('');
       setSubmitting(false);
       setDone(true);
-      setTimeout(() => {
+      closeTimer.current = setTimeout(() => {
         setDone(false);
         setOpen(false);
       }, 1800);
     } catch {
       setSubmitting(false);
+      setError(true);
     }
   }
 
@@ -44,6 +50,7 @@ export default function DocFeedbackButton({ pageRef }) {
     if (!v) {
       setNote('');
       setDone(false);
+      setError(false);
     }
   }
 
@@ -72,9 +79,12 @@ export default function DocFeedbackButton({ pageRef }) {
                 </DialogDescription>
               </DialogHeader>
               <p className="text-xs text-muted-foreground">Regarding: {pageRef}</p>
+              {error && (
+                <p className="text-sm text-destructive">Couldn't send that — please try again.</p>
+              )}
               <Textarea
                 value={note}
-                onChange={(e) => setNote(e.target.value)}
+                onChange={(e) => { setNote(e.target.value); setError(false); }}
                 placeholder="What is wrong or out of date?"
                 rows={4}
                 autoFocus
