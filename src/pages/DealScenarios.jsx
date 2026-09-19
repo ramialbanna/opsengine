@@ -73,11 +73,12 @@ function nextQuestionKey(currentKey, answers) {
 function matchScenario(scenarios, a) {
   return scenarios.find((s) => {
     if (s.title_status !== a.title_status) return false;
-    if (s.seller_capacity !== a.seller_capacity) return false;
     if (a.title_status === 'Payoff') {
       if (s.title_holding_state !== a.title_holding_state) return false;
       if (s.original_lien_release_obtained_today !== a.original_lien_release_obtained_today) return false;
       if (s.lien_satisfaction_method !== a.lien_satisfaction_method) return false;
+    } else {
+      if (s.seller_capacity !== a.seller_capacity) return false;
     }
     return true;
   });
