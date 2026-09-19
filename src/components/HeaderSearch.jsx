@@ -1,15 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
-import { Search, X, Hash, Layers, Building2, FileText, BookText } from 'lucide-react';
+import { Search, X, Hash, Layers, Building2, FileText, BookText, Users, ShieldCheck, Server, MapPin, GitBranch } from 'lucide-react';
 import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
 
-const ORDER = ['stage', 'procedure', 'department', 'document', 'glossary'];
+const ORDER = ['dealScenario', 'stage', 'procedure', 'role', 'department', 'document', 'system', 'control', 'location', 'glossary'];
 const META = {
+  dealScenario: { label: 'Deal scenarios', icon: GitBranch },
   stage: { label: 'Stages', icon: Hash },
   procedure: { label: 'Procedures', icon: Layers },
+  role: { label: 'Roles', icon: Users },
   department: { label: 'Departments', icon: Building2 },
   document: { label: 'Documents', icon: FileText },
+  system: { label: 'Systems', icon: Server },
+  control: { label: 'Controls', icon: ShieldCheck },
+  location: { label: 'Locations', icon: MapPin },
   glossary: { label: 'Glossary', icon: BookText },
 };
 
@@ -24,16 +29,23 @@ export default function HeaderSearch() {
 
   async function ensureCache() {
     if (cache.current) return cache.current;
-    const [stages, procedures, departments, documents, glossary] = await Promise.all([
+    const [stages, procedures, departments, documents, glossary, roles, controls, systems, locations, scenarios] = await Promise.all([
       base44.entities.Stage.list('number', 200),
       base44.entities.Procedure.list('-updated_date', 200),
-      base44.entities.Department.list(),
+      base44.entities.Department.list('name', 200),
       base44.entities.DocumentArtifact.list('-updated_date', 200),
       base44.entities.GlossaryTerm.list('term', 500),
+      base44.entities.Role.list('title', 200),
+      base44.entities.Control.list('name', 200),
+      base44.entities.System.list('name', 200),
+      base44.entities.Location.list('name', 200),
+      base44.entities.DealScenario.list('code', 200),
     ]);
     const stageById = {};
     stages.forEach((s) => { stageById[s.id] = s; });
-    cache.current = { stages, procedures, departments, documents, glossary, stageById };
+    const deptById = {};
+    departments.forEach((d) => { deptById[d.id] = d; });
+    cache.current = { stages, procedures, departments, documents, glossary, roles, controls, systems, locations, scenarios, stageById, deptById };
     return cache.current;
   }
 
@@ -66,6 +78,32 @@ export default function HeaderSearch() {
             r.push({ type: 'glossary', id: g.id, title: g.term, sub: g.category || 'Glossary', ref: g });
           }
         });
+        c.scenarios.forEach((s) => {
+          if ((s.code || '').toLowerCase().includes(q) || (s.name || '').toLowerCase().includes(q)) {
+            r.push({ type: 'dealScenario', id: s.id, title: `${s.code} · ${s.name}`, sub: s.title_status || 'Deal scenario', ref: s });
+          }
+        });
+        c.roles.forEach((role) => {
+          if ((role.title || '').toLowerCase().includes(q)) {
+            const dept = c.deptById[role.department];
+            r.push({ type: 'role', id: role.id, title: role.title, sub: dept ? dept.name : 'Role', ref: role });
+          }
+        });
+        c.controls.forEach((ctrl) => {
+          if ((ctrl.name || '').toLowerCase().includes(q)) {
+            r.push({ type: 'control', id: ctrl.id, title: ctrl.name, sub: ctrl.what_it_catches || 'Control', ref: ctrl });
+          }
+        });
+        c.systems.forEach((sys) => {
+          if ((sys.name || '').toLowerCase().includes(q)) {
+            r.push({ type: 'system', id: sys.id, title: sys.name, sub: sys.used_for || 'System', ref: sys });
+          }
+        });
+        c.locations.forEach((loc) => {
+          if ((loc.name || '').toLowerCase().includes(q) || (loc.aliases || '').toLowerCase().includes(q)) {
+            r.push({ type: 'location', id: loc.id, title: loc.name, sub: loc.what_happens_there || 'Location', ref: loc });
+          }
+        });
         setResults(r.slice(0, 30));
         setLoading(false);
         setOpen(true);
@@ -91,6 +129,11 @@ export default function HeaderSearch() {
     } else if (r.type === 'department') navigate(`/departments/${r.ref.id}`);
     else if (r.type === 'document') navigate('/documents');
     else if (r.type === 'glossary') navigate(`/glossary#term-${r.ref.id}`);
+    else if (r.type === 'dealScenario') navigate(`/deal-scenarios/${r.ref.code}`);
+    else if (r.type === 'role') navigate('/roles');
+    else if (r.type === 'control') navigate('/controls');
+    else if (r.type === 'system') navigate('/systems');
+    else if (r.type === 'location') navigate('/locations');
   }
 
   const grouped = ORDER
