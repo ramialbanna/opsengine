@@ -5,13 +5,8 @@ import Markdown from '@/components/Markdown';
 import CustomerStepsFlow from '@/components/CustomerStepsFlow';
 import PostSaleFlow from '@/components/PostSaleFlow';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
 import { ArrowLeft, ArrowRight, ChevronRight, Layers, Lock } from 'lucide-react';
-
-const STATUS_STYLES = {
-  Current: 'text-emerald-700 border-emerald-300 bg-emerald-50 dark:text-emerald-400 dark:border-emerald-900 dark:bg-emerald-950/40',
-  Draft: 'text-muted-foreground border-border bg-muted',
-  'Needs review': 'text-amber-700 border-amber-300 bg-amber-50 dark:text-amber-400 dark:border-amber-900 dark:bg-amber-950/40',
-};
 
 function Field({ label, value }) {
   if (!value) return null;
@@ -43,11 +38,7 @@ function ProcedureItem({ p, roleMap }) {
     <Link to={`/procedures/${p.id}`} className="block rounded-lg border border-border bg-card p-4 transition-colors hover:border-brand hover:bg-accent">
       <div className="flex items-start justify-between gap-3">
         <h4 className="font-heading text-sm font-semibold leading-tight">{p.title}</h4>
-        {p.status && (
-          <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-medium ${STATUS_STYLES[p.status] || STATUS_STYLES.Draft}`}>
-            {p.status}
-          </span>
-        )}
+        <ProcedureStatusBadge status={p.status} />
       </div>
       <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
         {role && <span>Owner: {role.title}</span>}

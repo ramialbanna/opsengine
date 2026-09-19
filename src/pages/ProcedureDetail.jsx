@@ -3,13 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import Markdown from '@/components/Markdown';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { Printer, ArrowLeft } from 'lucide-react';
-
-const STATUS_STYLES = {
-  Current: 'text-emerald-700 border-emerald-300 bg-emerald-50 dark:text-emerald-400 dark:border-emerald-900 dark:bg-emerald-950/40',
-  Draft: 'text-muted-foreground border-border bg-muted',
-  'Needs review': 'text-amber-700 border-amber-300 bg-amber-50 dark:text-amber-400 dark:border-amber-900 dark:bg-amber-950/40',
-};
+import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
+import { Printer, ArrowLeft, AlertTriangle } from 'lucide-react';
 
 function Meta({ label, children }) {
   if (!children) return null;
@@ -70,9 +65,16 @@ export default function ProcedureDetail() {
   crumbs.push({ label: proc.title });
 
   const systemsUsed = (proc.systems_used || []).map((sid) => systemMap[sid]).filter(Boolean);
+  const isOpen = proc.status !== 'Current';
 
   return (
     <div>
+      {isOpen && (
+        <div className="mb-4 flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          <span>This procedure is not yet finalised. It describes our intended process but has not been confirmed.</span>
+        </div>
+      )}
       <Breadcrumbs items={crumbs} />
 
       <div className="mb-4 flex items-center justify-between gap-3 print:hidden">
@@ -90,11 +92,7 @@ export default function ProcedureDetail() {
 
       <article className="print:break-after-page">
         <div className="flex flex-wrap items-center gap-2">
-          {proc.status && (
-            <span className={`rounded-full border px-2 py-0.5 text-[11px] font-medium ${STATUS_STYLES[proc.status] || STATUS_STYLES.Draft}`}>
-              {proc.status}
-            </span>
-          )}
+          <ProcedureStatusBadge status={proc.status} />
           {proc.source && (
             <span className="rounded-full border border-border bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
               {proc.source}

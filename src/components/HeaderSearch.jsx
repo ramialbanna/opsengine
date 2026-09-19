@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { Search, X, Hash, Layers, Building2, FileText, BookText } from 'lucide-react';
+import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
 
 const ORDER = ['stage', 'procedure', 'department', 'document', 'glossary'];
 const META = {
@@ -86,8 +87,7 @@ export default function HeaderSearch() {
     setQuery('');
     if (r.type === 'stage') navigate(`/stages/${r.ref.number}`);
     else if (r.type === 'procedure') {
-      const st = cache.current?.stageById[r.ref.stage];
-      navigate(st ? `/stages/${st.number}` : '/');
+      navigate(`/procedures/${r.ref.id}`);
     } else if (r.type === 'department') navigate('/departments');
     else if (r.type === 'document') navigate('/deal-scenarios');
     else if (r.type === 'glossary') navigate('/glossary');
@@ -143,6 +143,7 @@ export default function HeaderSearch() {
                       <span className="block truncate text-sm font-medium">{r.title}</span>
                       <span className="block truncate text-xs text-muted-foreground">{r.sub}</span>
                     </span>
+                    {r.type === 'procedure' && <ProcedureStatusBadge status={r.ref.status} />}
                   </button>
                 ))}
               </div>

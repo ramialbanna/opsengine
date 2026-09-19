@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   MapPin,
   Users,
+  ClipboardList,
 } from 'lucide-react';
 
 export const navGroups = [
@@ -45,6 +46,7 @@ export const navGroups = [
       { id: 'systems', label: 'Systems', path: '/systems', icon: Server, description: 'Every system we use and who uses it.' },
       { id: 'controls', label: 'Controls', path: '/controls', icon: ShieldCheck, description: 'Checks that run in the business, by frequency.' },
       { id: 'locations', label: 'Locations', path: '/locations', icon: MapPin, description: 'Our sites, including retired names.' },
+      { id: 'open-items', label: 'Open items', path: '/open-items', icon: ClipboardList, description: 'Procedures still being written or reviewed.' },
     ],
   },
 ];

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import ProcedureStatusBadge from '@/components/ProcedureStatusBadge';
 import { ArrowLeft, Users, Hash, ListChecks, Server, ShieldCheck } from 'lucide-react';
 
 function Section({ icon: Icon, title, count, children }) {
@@ -138,7 +139,10 @@ export default function DepartmentDetail() {
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {deptProcedures.map((p) => (
               <Link key={p.id} to={`/procedures/${p.id}`} className="block rounded-lg border border-border bg-card p-4 transition-colors hover:border-brand hover:bg-accent">
-                <h3 className="font-heading text-sm font-semibold">{p.title}</h3>
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="font-heading text-sm font-semibold">{p.title}</h3>
+                  <ProcedureStatusBadge status={p.status} />
+                </div>
                 {stageMap[p.stage] && (
                   <p className="mt-1 text-xs text-muted-foreground">Stage {stageMap[p.stage].number} · {stageMap[p.stage].name}</p>
                 )}
