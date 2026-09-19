@@ -2,6 +2,11 @@ import Markdown from '@/components/Markdown';
 import DocumentCard from './DocumentCard';
 import { groupStyleForCode } from '@/lib/scenarioGroups';
 import { RotateCcw, ListOrdered, Info } from 'lucide-react';
+import { useStandingRules } from '@/hooks/useStandingRules';
+
+const DEAL_RULES_FALLBACK = [
+  "If the title names two owners joined by AND, every owner signs every document. If joined by OR, one signer is enough. Collect a driver's licence for every person named on the title regardless of who signs.",
+];
 
 function StepHeader({ n, title }) {
   return (
@@ -21,6 +26,7 @@ function Divider({ children }) {
 }
 
 export default function ScenarioResult({ scenario, docMap, onRestart, onPickAnother }) {
+  const dealRules = useStandingRules('Deal scenarios', DEAL_RULES_FALLBACK);
   const initialIds = scenario.initial_submission_set || [];
   const finalIds = scenario.final_submission_set || [];
   const initial = initialIds.map((id) => docMap[id]).filter(Boolean);
@@ -85,11 +91,9 @@ export default function ScenarioResult({ scenario, docMap, onRestart, onPickAnot
       <div className="mt-6 rounded-lg border-2 border-amber-300 bg-amber-50 p-4 dark:border-amber-900 dark:bg-amber-950/40">
         <div className="flex items-start gap-2.5">
           <Info className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
-          <p className="text-sm leading-relaxed text-foreground/90">
-            If the title names two owners joined by <strong>AND</strong>, every owner signs every document.
-            If joined by <strong>OR</strong>, one signer is enough. Collect a driver's licence for every
-            person named on the title regardless of who signs.
-          </p>
+          <div className="space-y-1 text-sm leading-relaxed text-foreground/90">
+            {dealRules.map((r, i) => <p key={i}>{r}</p>)}
+          </div>
         </div>
       </div>
 

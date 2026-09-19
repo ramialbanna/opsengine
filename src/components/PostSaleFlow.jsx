@@ -1,4 +1,5 @@
 import { ChevronDown, Diamond, CheckCircle2, Clock } from 'lucide-react';
+import { useStandingRules } from '@/hooks/useStandingRules';
 
 const TRACKS = {
   title: {
@@ -107,6 +108,8 @@ function BranchLabel({ children }) {
   );
 }
 
+const POST_SALE_FALLBACK = ['30 days to turn in the title, or the buyer may arbitrate'];
+
 function TitleTrack() {
   return (
     <div>
@@ -150,12 +153,12 @@ function PsiTrack() {
   );
 }
 
-function MoneyTrack() {
+function MoneyTrack({ rules }) {
   return (
     <div>
       <TrackHeader track="money" />
       <Connector />
-      <DeadlineBox>30 days to turn in the title, or the buyer may arbitrate</DeadlineBox>
+      <DeadlineBox>{rules.map((r, i) => <div key={i}>{r}</div>)}</DeadlineBox>
       <Connector />
       <EndBox track="money">Monthly reconciliation — iDMS against the Manheim Selling Summary</EndBox>
     </div>
@@ -163,6 +166,7 @@ function MoneyTrack() {
 }
 
 export default function PostSaleFlow() {
+  const rules = useStandingRules('Post-sale', POST_SALE_FALLBACK);
   return (
     <section className="mt-8">
       <h2 className="font-heading text-lg font-bold tracking-tight">What happens after a unit sells</h2>
@@ -184,7 +188,7 @@ export default function PostSaleFlow() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-5">
           <TitleTrack />
           <PsiTrack />
-          <MoneyTrack />
+          <MoneyTrack rules={rules} />
         </div>
       </div>
 

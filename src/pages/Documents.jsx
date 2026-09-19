@@ -4,6 +4,7 @@ import Markdown from '@/components/Markdown';
 import { AlertTriangle, Pin } from 'lucide-react';
 import { groupStyleForCode } from '@/lib/scenarioGroups';
 import { ENTITY_LIMITS } from '@/lib/entity-limits';
+import { useStandingRules } from '@/hooks/useStandingRules';
 
 const STANDING_RULES = [
   'Black or blue ink only.',
@@ -60,6 +61,7 @@ function DocCard({ doc, scenarios }) {
 
 export default function Documents() {
   const [data, setData] = useState(null);
+  const rules = useStandingRules('Legal documents', STANDING_RULES);
 
   useEffect(() => {
     Promise.all([
@@ -99,7 +101,7 @@ export default function Documents() {
           <h2 className="font-heading text-sm font-semibold uppercase tracking-wider text-amber-800 dark:text-amber-300">Standing rules</h2>
         </div>
         <ul className="space-y-1 text-sm leading-relaxed text-foreground/90">
-          {STANDING_RULES.map((r, i) => (
+          {rules.map((r, i) => (
             <li key={i} className="flex gap-2">
               <span className="shrink-0 text-amber-600 dark:text-amber-400">•</span>
               <span>{r}</span>

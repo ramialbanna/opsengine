@@ -1,0 +1,39 @@
+{
+  "name": "StandingRule",
+  "type": "object",
+  "properties": {
+    "rule_text": {
+      "type": "string",
+      "format": "textarea",
+      "description": "The rule as staff should read it."
+    },
+    "applies_to": {
+      "type": "string",
+      "enum": [
+        "Legal documents",
+        "Deal scenarios",
+        "Post-sale",
+        "Purchase execution"
+      ],
+      "description": "Determines where the rule renders."
+    },
+    "sort_order": {
+      "type": "number",
+      "description": "Display order within its group."
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "SOP",
+        "Stated by TAV",
+        "Draft"
+      ],
+      "default": "SOP",
+      "description": "Where this rule's authority comes from."
+    }
+  },
+  "required": [
+    "rule_text",
+    "applies_to"
+  ]
+}

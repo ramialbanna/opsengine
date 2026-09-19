@@ -1,4 +1,14 @@
 import { ChevronDown, Lock, Diamond, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { useStandingRules } from '@/hooks/useStandingRules';
+
+const FLOW_FALLBACK = [
+  'Step 1 · Pre-Buy Inspection',
+  'Step 2 · QA Document & Deal Review',
+  'Funds may be released',
+  'Step 3 · Funds Distribution',
+  'You may leave the customer',
+  'Step 4 · Inventory Control',
+];
 
 function Arrow({ label, size = 'h-5 w-5' }) {
   return (
@@ -85,6 +95,7 @@ function NotConfirmedBranch() {
 }
 
 export default function CustomerStepsFlow() {
+  const rules = useStandingRules('Purchase execution', FLOW_FALLBACK);
   return (
     <section className="mt-8">
       <h2 className="font-heading text-lg font-bold tracking-tight">The four steps at the customer</h2>
@@ -95,7 +106,7 @@ export default function CustomerStepsFlow() {
       <div className="mt-5 mx-auto max-w-md">
         <PlainBox>Transporter arrives — meets the customer inside the bank</PlainBox>
         <Arrow />
-        <PlainBox>Step 1 · Pre-Buy Inspection</PlainBox>
+        <PlainBox>{rules[0]}</PlainBox>
         <Arrow />
 
         <div className="grid gap-3 sm:grid-cols-2 sm:items-start">
@@ -104,19 +115,19 @@ export default function CustomerStepsFlow() {
         </div>
 
         <Arrow label="Confirmed" />
-        <PlainBox>Step 2 · QA Document &amp; Deal Review</PlainBox>
+        <PlainBox>{rules[1]}</PlainBox>
         <Arrow />
         <PlainBox>Initial submission set</PlainBox>
         <Arrow />
-        <GateBox id="2a">Funds may be released</GateBox>
+        <GateBox id="2a">{rules[2]}</GateBox>
         <Arrow />
-        <PlainBox>Step 3 · Funds Distribution</PlainBox>
+        <PlainBox>{rules[3]}</PlainBox>
         <Arrow />
         <PlainBox>Final submission set</PlainBox>
         <Arrow />
-        <GateBox id="2b">You may leave the customer</GateBox>
+        <GateBox id="2b">{rules[4]}</GateBox>
         <Arrow />
-        <PlainBox>Step 4 · Inventory Control</PlainBox>
+        <PlainBox>{rules[5]}</PlainBox>
         <Arrow />
         <EndBox>Unit delivered · keys together · paper tag in packet</EndBox>
       </div>

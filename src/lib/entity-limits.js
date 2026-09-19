@@ -16,4 +16,5 @@ export const ENTITY_LIMITS = {
   PaymentInstrument: { sort: 'name', limit: 500 },
   FundingAccount: { sort: 'name', limit: 500 },
   DocFeedback: { sort: '-created_date', limit: 500 },
+  StandingRule: { sort: 'sort_order', limit: 500 },
 };
