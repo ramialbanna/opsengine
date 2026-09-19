@@ -1,0 +1,44 @@
+{
+  "name": "GlossaryTerm",
+  "type": "object",
+  "properties": {
+    "term": {
+      "type": "string",
+      "description": "The term or acronym being defined."
+    },
+    "definition": {
+      "type": "string",
+      "format": "textarea",
+      "description": "Plain-language definition of the term."
+    },
+    "also_known_as": {
+      "type": "string",
+      "description": "Alternative names or synonyms for the term."
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Document",
+        "Financial",
+        "Operational",
+        "System",
+        "Title",
+        "Vehicle",
+        "Auction"
+      ],
+      "description": "Single category the term belongs to."
+    },
+    "related_terms": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "relation": "GlossaryTerm"
+      },
+      "description": "Other glossary terms related to this one."
+    }
+  },
+  "required": [
+    "term",
+    "category"
+  ]
+}

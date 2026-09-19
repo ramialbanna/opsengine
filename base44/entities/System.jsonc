@@ -1,0 +1,28 @@
+{
+  "name": "System",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "System name, e.g. vAuto, iDMS, Manheim, HeyMarket, Super Dispatch, Divvy, QuickBooks, CARFAX, AutoCheck, Auto Data Direct, AppSheet."
+    },
+    "used_for": {
+      "type": "string",
+      "format": "textarea",
+      "description": "What the system is used for in our operation."
+    },
+    "who_uses_it": {
+      "type": "string",
+      "format": "textarea",
+      "description": "Which roles or departments use the system."
+    },
+    "notes": {
+      "type": "string",
+      "format": "textarea",
+      "description": "Access, licensing, login, and other practical notes."
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

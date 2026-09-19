@@ -1,0 +1,38 @@
+{
+  "name": "Role",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Role title, e.g. Buyer, Dispatcher, Reconditioning Manager. Roles are posts, not people."
+    },
+    "department": {
+      "type": "string",
+      "relation": "Department",
+      "description": "Department this role belongs to."
+    },
+    "responsibilities": {
+      "type": "string",
+      "format": "textarea",
+      "description": "What the role is responsible for day to day."
+    },
+    "decision_authority": {
+      "type": "string",
+      "format": "textarea",
+      "description": "Decisions this role is authorised to make, and the limits of that authority."
+    },
+    "escalates_to": {
+      "type": "string",
+      "relation": "Role",
+      "description": "Optional role that this role escalates to."
+    },
+    "group_contact": {
+      "type": "string",
+      "description": "Department group inbox / shared contact where one exists. Never store individual names or personal contact details."
+    }
+  },
+  "required": [
+    "title",
+    "department"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "name": "Department",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Department name, e.g. Sourcing, Transport, Reconditioning."
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL-friendly identifier, e.g. sourcing, transport."
+    },
+    "short_description": {
+      "type": "string",
+      "description": "One-line summary of the department."
+    },
+    "purpose": {
+      "type": "string",
+      "format": "textarea",
+      "description": "What this department exists to do within the operation."
+    },
+    "what_it_owns": {
+      "type": "string",
+      "format": "textarea",
+      "description": "The processes, decisions, and outcomes this department is accountable for."
+    },
+    "parent_department": {
+      "type": "string",
+      "relation": "Department",
+      "description": "Optional parent department for reporting structure."
+    },
+    "sort_order": {
+      "type": "number",
+      "description": "Display order for listings."
+    }
+  },
+  "required": [
+    "name",
+    "slug"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Location",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Location name, e.g. Main Lot, Recon Shop, Auction Lane 4."
+    },
+    "address": {
+      "type": "string",
+      "description": "Street address of the location."
+    },
+    "what_happens_there": {
+      "type": "string",
+      "format": "textarea",
+      "description": "What operations occur at this location."
+    },
+    "aliases": {
+      "type": "string",
+      "description": "Other names the location is known by, as free text."
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the location is currently in use."
+    }
+  },
+  "required": [
+    "name"
+  ]
+}
