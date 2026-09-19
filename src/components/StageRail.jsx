@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { ENTITY_LIMITS } from '@/lib/entity-limits';
 
@@ -55,6 +56,13 @@ export default function StageRail() {
           </Link>
         );
       })}
+      <Link
+        to="/stages"
+        className="group flex items-center gap-2 self-center rounded-lg border border-dashed border-border bg-muted/30 px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:border-brand hover:bg-accent hover:text-foreground lg:min-w-[200px] lg:flex-none"
+      >
+        All stages
+        <ArrowRight className="h-4 w-4" />
+      </Link>
     </div>
   );
 }

@@ -1,12 +1,5 @@
 import {
-  PackageSearch,
-  Truck,
-  PackageCheck,
-  Wrench,
-  Boxes,
-  Gavel,
-  Handshake,
-  Wallet,
+  Workflow,
   Building2,
   BookOpen,
   FileStack,
@@ -23,14 +16,7 @@ export const navGroups = [
   {
     label: 'Operations',
     items: [
-      { id: 'sourcing', label: 'Sourcing', path: '/sourcing', icon: PackageSearch, description: 'Finding, valuing, and buying vehicles.' },
-      { id: 'transport', label: 'Transport', path: '/transport', icon: Truck, description: 'Pickup, dispatcher workflow, and field logistics.' },
-      { id: 'receiving', label: 'Receiving', path: '/receiving', icon: PackageCheck, description: 'Lot intake, check-in, and condition log.' },
-      { id: 'reconditioning', label: 'Reconditioning', path: '/reconditioning', icon: Wrench, description: 'Mechanical, body, detail, and photo.' },
-      { id: 'inventory', label: 'Inventory', path: '/inventory', icon: Boxes, description: 'Stocking, pricing, and merchandising.' },
-      { id: 'auction', label: 'Auction', path: '/auction', icon: Gavel, description: 'Listing, run lists, and sale day.' },
-      { id: 'sales', label: 'Sales', path: '/sales', icon: Handshake, description: 'Deal desk, buyer relations, and paperwork.' },
-      { id: 'collections', label: 'Collections', path: '/collections', icon: Wallet, description: 'Invoicing, funding, and accounts receivable.' },
+      { id: 'stages', label: 'The twelve stages', path: '/stages', icon: Workflow, description: 'The full lifecycle, sourcing through post-sale.' },
     ],
   },
   {

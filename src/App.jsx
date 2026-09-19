@@ -10,7 +10,8 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import { ThemeProvider } from '@/lib/ThemeContext';
 import Layout from '@/components/Layout';
 import Home from '@/pages/Home';
-import SectionPage from '@/pages/SectionPage';
+import Stages from '@/pages/Stages';
+import Onboarding from '@/pages/Onboarding';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
@@ -58,16 +59,9 @@ const AuthenticatedApp = () => {
       <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/sourcing" element={<SectionPage sectionId="sourcing" />} />
-          <Route path="/transport" element={<SectionPage sectionId="transport" />} />
-          <Route path="/receiving" element={<SectionPage sectionId="receiving" />} />
-          <Route path="/reconditioning" element={<SectionPage sectionId="reconditioning" />} />
-          <Route path="/inventory" element={<SectionPage sectionId="inventory" />} />
-          <Route path="/auction" element={<SectionPage sectionId="auction" />} />
-          <Route path="/sales" element={<SectionPage sectionId="sales" />} />
-          <Route path="/collections" element={<SectionPage sectionId="collections" />} />
+          <Route path="/stages" element={<Stages />} />
           <Route path="/departments" element={<Departments />} />
-          <Route path="/onboarding" element={<SectionPage sectionId="onboarding" />} />
+          <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/stages/:number" element={<StageDetail />} />
           <Route path="/deal-scenarios" element={<DealScenarios />} />
           <Route path="/deal-scenarios/:code" element={<ScenarioDetail />} />
