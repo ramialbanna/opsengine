@@ -19,6 +19,7 @@ import StageDetail from '@/pages/StageDetail';
 import Departments from '@/pages/Departments';
 import DealScenarios from '@/pages/DealScenarios';
 import ScenarioDetail from '@/pages/ScenarioDetail';
+import ProcedureDetail from '@/pages/ProcedureDetail';
 import Glossary from '@/pages/Glossary';
 import DepartmentDetail from '@/pages/DepartmentDetail';
 import Documents from '@/pages/Documents';
@@ -69,6 +70,7 @@ const AuthenticatedApp = () => {
           <Route path="/stages/:number" element={<StageDetail />} />
           <Route path="/deal-scenarios" element={<DealScenarios />} />
           <Route path="/deal-scenarios/:code" element={<ScenarioDetail />} />
+          <Route path="/procedures/:id" element={<ProcedureDetail />} />
           <Route path="/glossary" element={<Glossary />} />
           <Route path="/departments/:id" element={<DepartmentDetail />} />
           <Route path="/documents" element={<Documents />} />

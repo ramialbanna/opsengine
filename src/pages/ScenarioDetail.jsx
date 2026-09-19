@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import ScenarioResult from '@/components/scenario/ScenarioResult';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import { ArrowLeft } from 'lucide-react';
 
 export default function ScenarioDetail() {
@@ -42,9 +43,7 @@ export default function ScenarioDetail() {
 
   return (
     <div>
-      <Link to="/deal-scenarios" className="mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="h-4 w-4" /> All scenarios
-      </Link>
+      <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Deal scenarios', to: '/deal-scenarios' }, { label: `${state.scenario.code} · ${state.scenario.name}` }]} />
       <ScenarioResult
         scenario={state.scenario}
         docMap={state.docMap}

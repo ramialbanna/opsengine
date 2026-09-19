@@ -4,6 +4,7 @@ import { base44 } from '@/api/base44Client';
 import Markdown from '@/components/Markdown';
 import CustomerStepsFlow from '@/components/CustomerStepsFlow';
 import PostSaleFlow from '@/components/PostSaleFlow';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import { ArrowLeft, ArrowRight, ChevronRight, Layers, Lock } from 'lucide-react';
 
 const STATUS_STYLES = {
@@ -39,7 +40,7 @@ function ChannelBadges({ channels }) {
 function ProcedureItem({ p, roleMap }) {
   const role = roleMap[p.role_responsible];
   return (
-    <div className="rounded-lg border border-border bg-card p-4">
+    <Link to={`/procedures/${p.id}`} className="block rounded-lg border border-border bg-card p-4 transition-colors hover:border-brand hover:bg-accent">
       <div className="flex items-start justify-between gap-3">
         <h4 className="font-heading text-sm font-semibold leading-tight">{p.title}</h4>
         {p.status && (
@@ -52,7 +53,7 @@ function ProcedureItem({ p, roleMap }) {
         {role && <span>Owner: {role.title}</span>}
         {p.trigger && <span className="truncate">Trigger: {p.trigger}</span>}
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -154,9 +155,7 @@ export default function StageDetail() {
 
   return (
     <div>
-      <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="h-4 w-4" /> All stages
-      </Link>
+      <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Stages', to: '/' }, { label: stage.name }]} />
 
       <div className="mt-4 flex items-start gap-3.5">
         <div className="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-primary font-heading text-lg font-bold text-primary-foreground">

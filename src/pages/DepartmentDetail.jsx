@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import { ArrowLeft, Users, Hash, ListChecks, Server, ShieldCheck } from 'lucide-react';
 
 function Section({ icon: Icon, title, count, children }) {
@@ -75,9 +76,7 @@ export default function DepartmentDetail() {
 
   return (
     <div>
-      <Link to="/departments" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="h-4 w-4" /> All departments
-      </Link>
+      <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Departments', to: '/departments' }, { label: dept.name }]} />
 
       <h1 className="mt-4 font-heading text-2xl font-bold tracking-tight">{dept.name}</h1>
       {dept.short_description && <p className="mt-1 text-sm text-muted-foreground">{dept.short_description}</p>}
@@ -138,13 +137,13 @@ export default function DepartmentDetail() {
         {deptProcedures.length === 0 ? <EmptyNote /> : (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {deptProcedures.map((p) => (
-              <div key={p.id} className="rounded-lg border border-border bg-card p-4">
+              <Link key={p.id} to={`/procedures/${p.id}`} className="block rounded-lg border border-border bg-card p-4 transition-colors hover:border-brand hover:bg-accent">
                 <h3 className="font-heading text-sm font-semibold">{p.title}</h3>
                 {stageMap[p.stage] && (
                   <p className="mt-1 text-xs text-muted-foreground">Stage {stageMap[p.stage].number} · {stageMap[p.stage].name}</p>
                 )}
                 {p.trigger && <p className="mt-1.5 text-xs text-muted-foreground">Trigger: {p.trigger}</p>}
-              </div>
+              </Link>
             ))}
           </div>
         )}

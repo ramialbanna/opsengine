@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import StageRail from '@/components/StageRail';
 import Mermaid from '@/components/Mermaid';
+import RecentlyUpdated from '@/components/RecentlyUpdated';
 import { Building2, FileText, BookText, ArrowRight } from 'lucide-react';
 
 const PROCESS_FLOW = `flowchart TD
@@ -84,6 +85,13 @@ export default function Home() {
             </Link>
           ))}
         </div>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+          Recently updated
+        </h2>
+        <RecentlyUpdated />
       </section>
     </div>
   );

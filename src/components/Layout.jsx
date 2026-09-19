@@ -12,7 +12,7 @@ export default function Layout() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex fixed inset-y-0 left-0 w-64 flex-col border-r border-sidebar-border bg-sidebar">
+      <aside className="hidden lg:flex print:hidden fixed inset-y-0 left-0 w-64 flex-col border-r border-sidebar-border bg-sidebar">
         <Sidebar />
       </aside>
 
@@ -38,8 +38,8 @@ export default function Layout() {
         </div>
       )}
 
-      <div className="lg:pl-64">
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border bg-background/85 px-4 backdrop-blur lg:px-6">
+      <div className="lg:pl-64 print:pl-0">
+        <header className="sticky top-0 z-30 flex print:hidden h-16 items-center gap-3 border-b border-border bg-background/85 px-4 backdrop-blur lg:px-6">
           <button
             type="button"
             onClick={() => setOpen(true)}
