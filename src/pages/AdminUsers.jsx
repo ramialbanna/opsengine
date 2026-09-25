@@ -9,12 +9,13 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { UserPlus, Trash2, ShieldCheck, RotateCw } from 'lucide-react';
+import { UserPlus, Trash2, ShieldCheck, RotateCw, Clock } from 'lucide-react';
 
 export default function AdminUsers() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [users, setUsers] = useState(null);
+  const [invitations, setInvitations] = useState(null);
   const [error, setError] = useState(false);
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('user');
@@ -27,6 +28,7 @@ export default function AdminUsers() {
     try {
       const res = await base44.functions.invoke('manageUsers', { action: 'list' });
       setUsers(res.data.users);
+      setInvitations(res.data.invitations || []);
     } catch {
       setError(true);
     }
@@ -56,6 +58,7 @@ export default function AdminUsers() {
     setInviting(true);
     try {
       await base44.users.inviteUser(email.trim(), role);
+      await base44.functions.invoke('manageUsers', { action: 'createInvitation', email: email.trim(), role });
       toast({ title: 'Invitation sent', description: `${email.trim()} invited as ${role}.` });
       setEmail('');
       setRole('user');
@@ -81,6 +84,10 @@ export default function AdminUsers() {
       setDeleting(false);
     }
   };
+
+  const userEmails = new Set((users || []).map((u) => (u.email || '').toLowerCase()));
+  const pending = (invitations || []).filter((i) => !userEmails.has((i.email || '').toLowerCase()));
+  const loading = users === null || invitations === null;
 
   return (
     <div>
@@ -115,17 +122,49 @@ export default function AdminUsers() {
         </div>
       </form>
 
-      <div className="mt-6 rounded-lg border border-border bg-card">
-        <div className="flex items-center justify-between border-b border-border px-4 py-3">
-          <h2 className="text-sm font-semibold">Current users</h2>
-          <Button variant="ghost" size="sm" onClick={load}><RotateCw className="h-4 w-4" /> Refresh</Button>
-        </div>
+      <div className="mt-6 flex items-center justify-between">
+        <h2 className="text-sm font-semibold">Invited — pending</h2>
+        <Button variant="ghost" size="sm" onClick={load}><RotateCw className="h-4 w-4" /> Refresh</Button>
+      </div>
+      <div className="mt-2 rounded-lg border border-border bg-card">
+        {error ? (
+          <div className="flex items-center justify-between px-4 py-3 text-sm">
+            <span className="text-destructive">Couldn't load invitations.</span>
+            <Button variant="outline" size="sm" onClick={load}>Retry</Button>
+          </div>
+        ) : loading ? (
+          <div className="px-4 py-3 text-sm text-muted-foreground">Loading…</div>
+        ) : pending.length === 0 ? (
+          <div className="px-4 py-3 text-sm text-muted-foreground">No pending invitations.</div>
+        ) : (
+          <ul className="divide-y divide-border">
+            {pending.map((inv) => (
+              <li key={inv.id} className="flex items-center justify-between gap-3 px-4 py-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    <span className="truncate text-sm font-medium">{inv.email}</span>
+                    <Badge variant="outline">Pending</Badge>
+                    {inv.role === 'admin' && <Badge variant="secondary">Admin</Badge>}
+                  </div>
+                  <div className="truncate text-xs text-muted-foreground">
+                    Invited {inv.invited_date ? new Date(inv.invited_date).toLocaleDateString() : '—'}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <h2 className="mt-6 text-sm font-semibold">Accepted users</h2>
+      <div className="mt-2 rounded-lg border border-border bg-card">
         {error ? (
           <div className="flex items-center justify-between px-4 py-3 text-sm">
             <span className="text-destructive">Couldn't load users.</span>
             <Button variant="outline" size="sm" onClick={load}>Retry</Button>
           </div>
-        ) : users === null ? (
+        ) : loading ? (
           <div className="px-4 py-3 text-sm text-muted-foreground">Loading users…</div>
         ) : users.length === 0 ? (
           <div className="px-4 py-3 text-sm text-muted-foreground">No users found.</div>

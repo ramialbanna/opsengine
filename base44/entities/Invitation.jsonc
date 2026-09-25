@@ -1,0 +1,38 @@
+{
+  "name": "Invitation",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "Email address the invitation was sent to."
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "user",
+        "admin"
+      ],
+      "default": "user",
+      "description": "App role offered in the invitation."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted"
+      ],
+      "default": "pending",
+      "description": "Whether the invitee has accepted and joined."
+    },
+    "invited_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the invitation was sent."
+    }
+  },
+  "required": [
+    "email",
+    "role",
+    "status"
+  ]
+}
