@@ -10,6 +10,7 @@ import {
   Layers,
   BookMarked,
   ClipboardList,
+  UserCog,
 } from 'lucide-react';
 
 export const navGroups = [
@@ -37,6 +38,13 @@ export const navGroups = [
       { id: 'locations', label: 'Locations', path: '/locations', icon: MapPin, description: 'Our sites, including retired names.' },
       { id: 'glossary', label: 'Glossary', path: '/glossary', icon: BookMarked, description: 'Definitions and acronyms used across the operation.' },
       { id: 'open-items', label: 'Open items', path: '/open-items', icon: ClipboardList, description: 'Procedures still being written or reviewed.' },
+    ],
+  },
+  {
+    label: 'Admin',
+    adminOnly: true,
+    items: [
+      { id: 'admin-users', label: 'Users', path: '/admin/users', icon: UserCog, description: 'Invite and remove app users.' },
     ],
   },
 ];

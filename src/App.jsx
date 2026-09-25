@@ -29,6 +29,7 @@ import Controls from '@/pages/Controls';
 import Locations from '@/pages/Locations';
 import Roles from '@/pages/Roles';
 import OpenItems from '@/pages/OpenItems';
+import AdminUsers from '@/pages/AdminUsers';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -74,6 +75,7 @@ const AuthenticatedApp = () => {
           <Route path="/locations" element={<Locations />} />
           <Route path="/roles" element={<Roles />} />
           <Route path="/open-items" element={<OpenItems />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />
